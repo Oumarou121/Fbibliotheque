@@ -1,0 +1,30 @@
+/* ==================Utility Class for shop */
+
+.margin {
+  padding-inline: 0.5rem;
+}
+button {
+  cursor: pointer;
+}
+.uil {
+  cursor: pointer;
+}
+
+/* =============Shop Feature Section */
+
+.shop-feature {
+  width: 100vw;
+  place-items: center;
+  padding: 3rem 0;
+  display: grid;
+}
+
+.product-list {
+  display: grid;
+}
+
+.shop-product {
+  display: grid;
+}
+
+/* =============Section 2 */

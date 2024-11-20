@@ -1,0 +1,168 @@
+/* BookList.css */
+.booklist-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.booklist-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 livres par ligne */
+  gap: 20px;
+  justify-items: center;
+}
+
+@media (min-width: 59em) {
+  .books-grid {
+    grid-template-columns: repeat(5, 1fr); /* 3 livres par ligne */
+  }
+}
+
+@media (max-width: 39em) {
+  .books-grid {
+    grid-template-columns: repeat(1, 1fr); /* 3 livres par ligne */
+  }
+}
+
+.book-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 250px;
+  cursor: pointer;
+}
+
+.book-card:hover {
+  transform: translateY(-10px);
+}
+
+.book-image {
+  width: 100%;
+  height: 300px; /* Fixe la hauteur des images */
+  object-fit: cover; /* Maintient le ratio et remplit l'espace */
+}
+
+.book-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.book-title {
+  font-size: 1.2rem;
+  color: #34495e;
+  margin-bottom: 5px;
+}
+
+.book-author {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
+
+.book-description {
+  font-size: 0.9rem;
+  color: #95a5a6;
+  margin-bottom: 15px;
+}
+
+.book-actions {
+  display: flex;
+  flex-direction: column; /* Placer les boutons en colonne */
+  align-items: center; /* Centrer les éléments horizontalement */
+  margin-top: 10px;
+  gap: 10px; /* Ajouter un écart entre les éléments */
+}
+
+/* Conteneur pour les boutons "Favori" et "Ajouter" sur la même ligne */
+.top-actions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* Prendre toute la largeur */
+  gap: 10px; /* Espacement uniforme entre les boutons */
+}
+
+/* Boutons individuels */
+.action-btn {
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Espacement entre l'icône et le texte */
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Pour prendre l'espace disponible */
+}
+
+/* Effet au survol */
+.action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles spécifiques pour chaque bouton */
+.favorite-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.favorite-btn:hover {
+  background-color: #e53935;
+}
+
+.cart-btn {
+  background-color: #ff9800;
+  color: white;
+}
+
+.cart-btn:hover {
+  background-color: #fb8c00;
+}
+
+.borrow-btn {
+  background-color: #4caf50;
+  color: white;
+  width: 70%; /* Centrer le bouton Emprunter */
+}
+
+.borrow-btn:hover {
+  background-color: #45a049;
+}
+
+/* Section de recherche */
+.search-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.search-input {
+  width: 60%;
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
