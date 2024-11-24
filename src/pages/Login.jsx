@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Login.css";
+import { registerClient, loginClient } from "../Api.js";
+import { useLoader } from "../LoaderContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginModal = () => {
+  const { showLoader, hideLoader } = useLoader();
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
@@ -10,6 +14,9 @@ const LoginModal = () => {
   const [isPasswordVisible2, setIsPasswordVisible2] = useState(false);
   const [isPasswordVisible3, setIsPasswordVisible3] = useState(false);
   const [title, setTitle] = useState("Welcome Back");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const forgotPasswordHandler = () => {
     setIsForgotPassword(true);
@@ -22,7 +29,7 @@ const LoginModal = () => {
     setTitle("Reset Password");
   };
 
-  const passwordHandler = () => {
+  const passwordHandler = ({ name, email }) => {
     setIsForgotPassword(false);
     setIsRegister(false);
     setIsLogin(false);
@@ -30,6 +37,8 @@ const LoginModal = () => {
     setIsPasswordVisible1(false);
     setIsPasswordVisible2(false);
     setIsPasswordVisible3(false);
+    setEmail(email);
+    setName(name);
   };
 
   const registerHandler = () => {
@@ -103,6 +112,9 @@ const LoginModal = () => {
               forgotPasswordHandler={forgotPasswordHandler}
               isPasswordVisible1={isPasswordVisible1}
               togglePasswordVisibility={togglePasswordVisibility}
+              showLoader={showLoader}
+              hideLoader={hideLoader}
+              navigate={navigate}
             />
           )}
 
@@ -116,11 +128,18 @@ const LoginModal = () => {
               isPasswordVisible2={isPasswordVisible2}
               isPasswordVisible3={isPasswordVisible3}
               registerHandler={registerHandler}
+              name={name}
+              email={email}
+              showLoader={showLoader}
+              hideLoader={hideLoader}
+              navigate={navigate}
             />
           )}
 
           {/* Register form */}
-          {!isLogin && isRegister && <FContinue passwordHandler={passwordHandler} />}
+          {!isLogin && isRegister && (
+            <FContinue passwordHandler={passwordHandler} />
+          )}
         </div>
       </div>
     </div>
@@ -217,100 +236,13 @@ function Icons() {
   );
 }
 
-// function Login() {
-//   const [isForgotPassword, setIsForgotPassword] = useState(false);
-//   const [isRegister, setIsRegister] = useState(false);
-//   const [isPassword, setIsPassword] = useState(false);
-//   const [isPasswordVisible1, setIsPasswordVisible1] = useState(false);
-//   const [isPasswordVisible2, setIsPasswordVisible2] = useState(false);
-//   const [isPasswordVisible3, setIsPasswordVisible3] = useState(false);
-//   const [title, setTitle] = useState("Welcome Back");
-
-//   const forgotPasswordHandler = () => {
-//     setIsForgotPassword(true);
-//     setIsRegister(false);
-//     setIsPassword(false);
-//     setIsPasswordVisible1(false);
-//     setIsPasswordVisible2(false);
-//     setIsPasswordVisible3(false);
-//     setTitle("Reset Password");
-//   };
-
-//   const passwordHandler = () => {
-//     setIsForgotPassword(false);
-//     setIsRegister(false);
-//     setIsPassword(true);
-//     setIsPasswordVisible1(false);
-//     setIsPasswordVisible2(false);
-//     setIsPasswordVisible3(false);
-//   };
-
-//   const registerHandler = () => {
-//     setIsPassword(false);
-//     setIsForgotPassword(false);
-//     setIsRegister(true);
-//     setIsPasswordVisible1(false);
-//     setIsPasswordVisible2(false);
-//     setIsPasswordVisible3(false);
-//     setTitle("Create an Account");
-//   };
-
-//   const loginHandler = () => {
-//     setIsPassword(false);
-//     setIsForgotPassword(false);
-//     setIsRegister(false);
-//     setIsPasswordVisible1(false);
-//     setIsPasswordVisible2(false);
-//     setIsPasswordVisible3(false);
-//     setTitle("Welcome Back");
-//   };
-
-//   const togglePasswordVisibility = (index) => {
-//     if (index === 1) {
-//       setIsPasswordVisible1(!isPasswordVisible1);
-//     } else if (index === 2) {
-//       setIsPasswordVisible2(!isPasswordVisible2);
-//     } else if (index === 3) {
-//       setIsPasswordVisible3(!isPasswordVisible3);
-//     }
-//   };
-
-//   useEffect(() => {
-//     // FContinue(passwordHandler);
-//     // FRegister();
-//     // FLogin();
-//     // FForgotPassword();
-//   }, []);
-
-//   return (
-//     <LoginModal
-//       isForgotPassword={isForgotPassword}
-//       setIsForgotPassword={setIsForgotPassword}
-//       isRegister={isRegister}
-//       setIsRegister={setIsRegister}
-//       isPassword={isPassword}
-//       setIsPassword={setIsPassword}
-//       isPasswordVisible1={isPasswordVisible1}
-//       isPasswordVisible2={isPasswordVisible2}
-//       isPasswordVisible3={isPasswordVisible3}
-//       setIsPasswordVisible1={setIsPasswordVisible1}
-//       setIsPasswordVisible2={setIsPasswordVisible2}
-//       setIsPasswordVisible3={setIsPasswordVisible3}
-//       title={title}
-//       setTitle={setTitle}
-//       forgotPasswordHandler={forgotPasswordHandler}
-//       passwordHandler={passwordHandler}
-//       registerHandler={registerHandler}
-//       loginHandler={loginHandler}
-//       togglePasswordVisibility={togglePasswordVisibility}
-//     />
-//   );
-// }
-
 function FLogin({
   forgotPasswordHandler,
   isPasswordVisible1,
   togglePasswordVisibility,
+  showLoader,
+  hideLoader,
+  navigate,
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -321,7 +253,7 @@ function FLogin({
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   // Handler pour le formulaire de connexion
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     console.log("Hello");
     e.preventDefault();
 
@@ -348,12 +280,23 @@ function FLogin({
         setPasswordError("Champ requis.");
       } else {
         // Logique de connexion ici
-        console.log("Connexion réussie");
+        showLoader();
+        setEmail(email.trim());
+        setPassword(password.trim());
+        const loginData = { email: email, password: password };
+        try {
+          const token = await loginClient(loginData);
+          localStorage.setItem("authToken", token);
+          console.log("Connexion réussie, token:", token);
+          navigate("/");
+        } catch (err) {
+          setPasswordError(err.message);
+          setLoginAttempts((prev) => prev + 1);
+        } finally {
+          hideLoader();
+        }
       }
     }
-
-    // Incrémenter les tentatives de connexion après chaque clic
-    setLoginAttempts((prev) => prev + 1);
   };
 
   return (
@@ -586,159 +529,166 @@ function FForgotPassword({ loginHandler }) {
 }
 
 function FContinue({ passwordHandler }) {
-    const handleContinue = (e) => {
-      e.preventDefault(); // Prevent the default form submission
-  
-      const nameInput = document.getElementById("user-name");
-      const emailInput = document.getElementById("register-user-email");
-      const nameError = document.getElementById("name-error");
-      const emailError = document.getElementById("register-email-error");
-      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  
-      // Clear previous errors
-      nameError.textContent = "";
-      emailError.textContent = "";
-      nameInput.classList.remove("error");
-      emailInput.classList.remove("error");
-  
-      // Validate the inputs
-      if (!nameInput.value.trim() && !emailInput.value.trim()) {
-        nameError.textContent = "Champ requis.";
+  const handleContinue = (e) => {
+    e.preventDefault(); // Prevent the default form submission
+
+    const nameInput = document.getElementById("user-name");
+    const emailInput = document.getElementById("register-user-email");
+    const nameError = document.getElementById("name-error");
+    const emailError = document.getElementById("register-email-error");
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Clear previous errors
+    nameError.textContent = "";
+    emailError.textContent = "";
+    nameInput.classList.remove("error");
+    emailInput.classList.remove("error");
+
+    // Validate the inputs
+    if (!nameInput.value.trim() && !emailInput.value.trim()) {
+      nameError.textContent = "Champ requis.";
+      nameInput.classList.add("error");
+      emailError.textContent = "Champ requis.";
+      emailInput.classList.add("error");
+    } else {
+      if (nameInput.value.trim().length < 4) {
+        nameError.textContent = "Le nom doit contenir au moins 4 lettres.";
         nameInput.classList.add("error");
-        emailError.textContent = "Champ requis.";
+      } else if (!emailPattern.test(emailInput.value)) {
+        emailError.textContent = "Veuillez entrer une adresse email valide.";
         emailInput.classList.add("error");
       } else {
-        if (nameInput.value.trim().length < 4) {
-          nameError.textContent = "Le nom doit contenir au moins 4 lettres.";
-          nameInput.classList.add("error");
-        } else if (!emailPattern.test(emailInput.value)) {
-          emailError.textContent = "Veuillez entrer une adresse email valide.";
-          emailInput.classList.add("error");
-        } else {
-          passwordHandler(); // Proceed to the next step
-        }
+        passwordHandler({
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+        }); // Proceed to the next step
       }
-    };
-  
-    return (
-      <form id="register" className="input-box" onSubmit={handleContinue}>
-        {/* Name */}
-        <div className="login_div">
-          <input
-            className="login-input"
-            id="user-name"
-            type="text"
-            name="name"
-            autoComplete="off"
-            placeholder=" "
-          />
-          <label className="login-label" htmlFor="user-name">
-            Name
-          </label>
-          <div className="login-error">
-            <svg
-              className="login-error-icon"
-              width="12px"
-              height="12px"
-              aria-hidden="true"
-            >
-              <use href="#warning" />
-            </svg>
-            <span id="name-error" aria-live="assertive"></span>
-          </div>
+    }
+  };
+
+  return (
+    <form id="register" className="input-box" onSubmit={handleContinue}>
+      {/* Name */}
+      <div className="login_div">
+        <input
+          className="login-input"
+          id="user-name"
+          type="text"
+          name="name"
+          autoComplete="off"
+          placeholder=" "
+        />
+        <label className="login-label" htmlFor="user-name">
+          Name
+        </label>
+        <div className="login-error">
+          <svg
+            className="login-error-icon"
+            width="12px"
+            height="12px"
+            aria-hidden="true"
+          >
+            <use href="#warning" />
+          </svg>
+          <span id="name-error" aria-live="assertive"></span>
         </div>
-  
-        {/* Email */}
-        <div className="login_div">
-          <input
-            className="login-input"
-            id="register-user-email"
-            type="email"
-            name="email"
-            autoComplete="off"
-            placeholder=" "
-          />
-          <label className="login-label" htmlFor="register-user-email">
-            Email
-          </label>
-          <div className="login-error">
-            <svg
-              className="login-error-icon"
-              width="12px"
-              height="12px"
-              aria-hidden="true"
-            >
-              <use href="#warning" />
-            </svg>
-            <span id="register-email-error" aria-live="assertive"></span>
-          </div>
+      </div>
+
+      {/* Email */}
+      <div className="login_div">
+        <input
+          className="login-input"
+          id="register-user-email"
+          type="email"
+          name="email"
+          autoComplete="off"
+          placeholder=" "
+        />
+        <label className="login-label" htmlFor="register-user-email">
+          Email
+        </label>
+        <div className="login-error">
+          <svg
+            className="login-error-icon"
+            width="12px"
+            height="12px"
+            aria-hidden="true"
+          >
+            <use href="#warning" />
+          </svg>
+          <span id="register-email-error" aria-live="assertive"></span>
         </div>
-  
-        {/* Continue Button */}
+      </div>
+
+      {/* Continue Button */}
+      <button
+        className="login-btn"
+        type="submit" // Change the type to "submit"
+        data-action="register_continue"
+      >
+        Continue
+      </button>
+
+      {/* Social buttons */}
+      <div className="login__or">Or Continue With</div>
+      <div className="login__social">
         <button
-          className="login-btn"
-          type="submit" // Change the type to "submit"
-          data-action="register_continue"
+          className="login__social-btn login__social-btn--google"
+          type="button"
+          title="Google"
         >
-          Continue
+          <svg
+            className="login__social-icon"
+            width="16px"
+            height="16px"
+            aria-hidden="true"
+          >
+            <use href="#google" />
+          </svg>
         </button>
-  
-        {/* Social buttons */}
-        <div className="login__or">Or Continue With</div>
-        <div className="login__social">
-          <button
-            className="login__social-btn login__social-btn--google"
-            type="button"
-            title="Google"
+        <button
+          className="login__social-btn login__social-btn--apple"
+          type="button"
+          title="Apple"
+        >
+          <svg
+            className="login__social-icon"
+            width="16px"
+            height="16px"
+            aria-hidden="true"
           >
-            <svg
-              className="login__social-icon"
-              width="16px"
-              height="16px"
-              aria-hidden="true"
-            >
-              <use href="#google" />
-            </svg>
-          </button>
-          <button
-            className="login__social-btn login__social-btn--apple"
-            type="button"
-            title="Apple"
+            <use href="#apple" />
+          </svg>
+        </button>
+        <button
+          className="login__social-btn login__social-btn--fb"
+          type="button"
+          title="Facebook"
+        >
+          <svg
+            className="login__social-icon"
+            width="16px"
+            height="16px"
+            aria-hidden="true"
           >
-            <svg
-              className="login__social-icon"
-              width="16px"
-              height="16px"
-              aria-hidden="true"
-            >
-              <use href="#apple" />
-            </svg>
-          </button>
-          <button
-            className="login__social-btn login__social-btn--fb"
-            type="button"
-            title="Facebook"
-          >
-            <svg
-              className="login__social-icon"
-              width="16px"
-              height="16px"
-              aria-hidden="true"
-            >
-              <use href="#fb" />
-            </svg>
-          </button>
-        </div>
-      </form>
-    );
-  }
-  
+            <use href="#fb" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  );
+}
 
 function FRegister({
   togglePasswordVisibility,
   isPasswordVisible2,
   isPasswordVisible3,
-  registerHandler
+  registerHandler,
+  name,
+  email,
+  showLoader,
+  hideLoader,
+  navigate,
 }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -753,28 +703,46 @@ function FRegister({
     password2.classList.remove("error");
 
     if (!password1.value.trim() && !password2.value.trim()) {
+      error1.textContent = "Required";
+      password1.classList.add("error");
+      error2.textContent = "Required";
+      password2.classList.add("error");
+    } else {
+      if (!password1.value.trim()) {
         error1.textContent = "Required";
         password1.classList.add("error");
-        error2.textContent = "Required";
+      } else if (password1.value.length < 6) {
+        error1.textContent = "Password must contain at least 6 characters.";
+        password1.classList.add("error");
+      } else if (!password2.value.trim()) {
+        error2.textContent = "Please confirm your password.";
         password2.classList.add("error");
-    }else{
-        if (!password1.value.trim()) {
-            error1.textContent = "Required";
-            password1.classList.add("error");
-          } else if (password1.value.length < 6) {
-            error1.textContent = "Password must contain at least 6 characters.";
-            password1.classList.add("error");
-          } else if (!password2.value.trim()) {
-            error2.textContent = "Please confirm your password.";
-            password2.classList.add("error");
-          } else if (password1.value !== password2.value) {
-            error2.textContent = "Passwords do not match.";
-            password2.classList.add("error");
-          } else {
-            // Proceed with registration logic here (e.g., API call)
-          }
+      } else if (password1.value !== password2.value) {
+        error2.textContent = "Passwords do not match.";
+        password2.classList.add("error");
+      } else {
+        // Proceed with registration logic here (e.g., API call)
+        showLoader();
+        const password = password1.value.trim();
+        const clientData = {
+          nom: name,
+          prenom: "",
+          email: email,
+          password: password,
+        };
+        console.log(clientData);
+        try {
+          const registeredClient = await registerClient(clientData);
+          console.log("Client enregistré:", registeredClient);
+          navigate("/");
+        } catch (err) {
+          error2.textContent = err.message;
+          password2.classList.add("error");
+        } finally {
+          hideLoader();
+        }
+      }
     }
-    
   };
 
   return (

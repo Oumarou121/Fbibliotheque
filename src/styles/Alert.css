@@ -1,0 +1,98 @@
+/* Couleurs par type */
+.custom-alert-success {
+  --alert-bg: #d4edda;
+  --alert-text: #155724;
+  --alert-link: #155724;
+}
+
+.custom-alert-error {
+  --alert-bg: #f8d7da;
+  --alert-text: #721c24;
+  --alert-link: #721c24;
+}
+
+.custom-alert-warning {
+  --alert-bg: #fff3cd;
+  --alert-text: #856404;
+  --alert-link: #856404;
+}
+
+.custom-alert-info {
+  --alert-bg: #d1ecf1;
+  --alert-text: #0c5460;
+  --alert-link: #0c5460;
+}
+
+/* Conteneur de l'alerte */
+.custom-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--alert-bg, #f0f4f8);
+  color: var(--alert-text, #333);
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+/* Animation : Apparition */
+.custom-alert.slide-in {
+  animation-name: slide-in;
+}
+
+/* Animation : Disparition */
+.custom-alert.fade-out {
+  animation-name: fade-out;
+}
+
+/* Animation : Apparition de l'alerte */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation : Disparition progressive */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Styles spécifiques au contenu */
+.custom-alert .custom-alert-content {
+  display: flex;
+  align-items: center;
+}
+
+.custom-alert .custom-alert-link {
+  color: var(--alert-link, #007bff);
+  text-decoration: underline;
+  margin-left: 10px;
+}
+
+.custom-alert .close-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+

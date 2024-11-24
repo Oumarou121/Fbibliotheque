@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css";
+import { logoutClient, getClientData, getTotalQuantityInCart } from "../Api";
 
 function Header() {
   const [activeLink, setActiveLink] = useState("/");
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // État pour le menu mobile
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userData, setUserData] = useState(null); // État pour stocker les données de l'utilisateur
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // État pour vérifier si l'utilisateur est connecté
 
   // Fonction pour changer le lien actif
   const handleLinkClick = (link) => {
@@ -17,11 +20,39 @@ function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        try {
+          const user = await getClientData();
+          setIsAuthenticated(true);
+          setUserData(user);
+          
+          // Récupérer la quantité totale dans le panier
+          await getTotalQuantityInCart(user?.id);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des données utilisateur :",
+            error
+          );
+          setIsAuthenticated(false);
+        }
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+
   return (
     <header className="primary-header container flex">
       <div className="header-inner-one flex">
         <div className="logo">
-          <img src="/logo.png" style={{ width: "50px", height: "50px" }} alt="Logo" />
+          <img
+            src="/logo.png"
+            style={{ width: "50px", height: "50px" }}
+            alt="Logo"
+          />
         </div>
         <button
           className="mobile-close-btn"
@@ -39,7 +70,9 @@ function Header() {
           >
             <li>
               <Link
-                className={`fs-100 fs-montserrat bold-500 ${activeLink === "/" ? "active" : ""}`}
+                className={`fs-100 fs-montserrat bold-500 ${
+                  activeLink === "/" ? "active" : ""
+                }`}
                 to="/"
                 onClick={() => handleLinkClick("/")}
               >
@@ -48,16 +81,20 @@ function Header() {
             </li>
             <li>
               <Link
-                className={`fs-100 fs-montserrat bold-500 ${activeLink === "/libary" ? "active" : ""}`}
-                to="/libary"
-                onClick={() => handleLinkClick("/libary")}
+                className={`fs-100 fs-montserrat bold-500 ${
+                  activeLink === "/library" ? "active" : ""
+                }`}
+                to="/library"
+                onClick={() => handleLinkClick("/library")}
               >
                 Library
               </Link>
             </li>
             <li>
               <Link
-                className={`fs-100 fs-montserrat bold-500 ${activeLink === "/abonnement" ? "active" : ""}`}
+                className={`fs-100 fs-montserrat bold-500 ${
+                  activeLink === "/abonnement" ? "active" : ""
+                }`}
                 to="/abonnement"
                 onClick={() => handleLinkClick("/abonnement")}
               >
@@ -66,7 +103,9 @@ function Header() {
             </li>
             <li>
               <Link
-                className={`fs-100 fs-montserrat bold-500 ${activeLink === "/about" ? "active" : ""}`}
+                className={`fs-100 fs-montserrat bold-500 ${
+                  activeLink === "/about" ? "active" : ""
+                }`}
                 to="/about"
                 onClick={() => handleLinkClick("/about")}
               >
@@ -75,7 +114,9 @@ function Header() {
             </li>
             <li>
               <Link
-                className={`fs-100 fs-montserrat bold-500 ${activeLink === "/contact" ? "active" : ""}`}
+                className={`fs-100 fs-montserrat bold-500 ${
+                  activeLink === "/contact" ? "active" : ""
+                }`}
                 to="/contact"
                 onClick={() => handleLinkClick("/contact")}
               >
@@ -94,7 +135,7 @@ function Header() {
             </div>
             <div className="dropdown-content">
               <div id="login-show">
-                <Profil />
+                <Profil isAuthenticated={isAuthenticated} userData={userData} />
               </div>
               <div>
                 <Link className="bbb text-black uil fs-150" to="/">
@@ -106,7 +147,7 @@ function Header() {
                   <i className="uil fs-150 uil-heart-alt"></i>Favoris
                 </Link>
               </div>
-              <div id="logout-btn">
+              <div id="logout-btn" onClick={logoutClient}>
                 <a className="bbb text-red uil fs-150" href="#">
                   <i className="uil fs-150 text-red uil-signout"></i>Déconnexion
                 </a>
@@ -116,7 +157,11 @@ function Header() {
         </div>
 
         <i className="uil uil-search"></i>
-        <i id="cart-box" className="cart-book uil uil-book" data-quantity="0"></i>
+        <i
+          id="cart-box"
+          className="cart-book uil uil-book"
+          data-quantity="0"
+        ></i>
         <i className="uil uil-envelope-check" data-quantity="0"></i>
       </div>
 
@@ -128,22 +173,19 @@ function Header() {
   );
 }
 
-function Profil() {
-  const isLoggedIn = false; // Remplacer par la vérification réelle de l'authentification
-
-  if (isLoggedIn) {
-    return (
-      <Link className="bbb text-black uil fs-150" to="/profil">
-        <i className="uil fs-150 uil-user"></i>Oumarou Mamoudou
-      </Link>
-    );
-  } else {
-    return (
-      <Link className="bbb text-black uil fs-150" to="/login">
-        <i className="uil fs-150 uil-user"></i>Se connecter
-      </Link>
-    );
-  }
+function Profil({ isAuthenticated, userData }) {
+  return (
+    <>
+      {isAuthenticated ? (
+        <Link className="bbb text-black uil fs-150" to="/profil">
+          <i className="uil fs-150 uil-user"></i> {userData?.nom || "Profil"}
+        </Link>
+      ) : (
+        <Link className="bbb text-black uil fs-150" to="/login">
+          <i className="uil fs-150 uil-user"></i> Se connecter
+        </Link>
+      )}
+    </>
+  );
 }
-
 export default Header;

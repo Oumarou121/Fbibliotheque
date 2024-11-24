@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TopBody from "../components/TopBody";
 import "../styles/Abonnement.css";
-import { FaCheckCircle, FaTimesCircle, FaStar } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
+import {
+  getAdherentByClient,
+  getClientData,
+  addAdherent,
+} from "../Api";
+import Alert from "../components/Alert";
+
 
 const plans = [
   {
     id: 1,
     name: "Basique",
-    price: "Gratuit",
+    price: "10DNT/mois",
     features: ["Accès limité", "5 emprunts/mois", "Pas de support premium"],
     isPremium: false,
   },
@@ -22,25 +29,115 @@ const plans = [
     id: 3,
     name: "Premium",
     price: "50DNT/mois",
-    features: ["Accès complet", "Emprunts illimités", "Support 24/7"],
+    features: ["Accès complet", "35 emprunts/mois", "Support 24/7"],
     isPremium: true,
   },
 ];
 
 function AbonnementContent() {
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [adherent, setAdherent] = useState([]);
+  const [userData, setUserData] = useState(null);
+  const [alerts, setAlerts] = useState([]); // Gestion des alertes
 
-  const handleSubscribe = (planId) => {
-    setSelectedPlan(planId);
-    alert(
-      `Vous avez souscrit au plan : ${
-        plans.find((plan) => plan.id === planId).name
-      }`
-    );
+  // Ajouter une alerte
+  const addAlert = (message, link, linkText, type) => {
+    setAlerts((prevAlerts) => [
+      ...prevAlerts,
+      { message, link, linkText, type, id: Date.now() },
+    ]);
   };
+
+  // Supprimer une alerte
+  const removeAlert = (id) => {
+    setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id));
+  };
+
+  const handleSubscribe = async (planId) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("Utilisateur non authentifié.");
+      alert("Vous devez être connecté pour vous abonner.");
+      addAlert(
+        "Vous devez être connecté pour vous abonner.",
+        "",
+        "",
+        "warning"
+      );
+      return;
+    }
+
+    if (adherent.length > 0) {
+      console.log(
+        "Utilisateur déjà abonné, type actuel :",
+        adherent[adherent.length - 1].type
+      );
+      addAlert(
+        "Utilisateur déjà abonné",
+        "",
+        "",
+        "warning"
+      );
+    }
+
+    // Ajouter un nouvel abonnement
+    try {
+      await addAdherent({ clientId: userData?.id, type: planId });
+      console.log("Abonnement ajouté pour le client :", userData?.id);
+      setSelectedPlan(planId);
+      addAlert(
+        `Abonnement ajouté pour le client :", ${userData?.nom}`,
+        "",
+        "",
+        "info"
+      );
+    } catch (error) {
+      console.error("Erreur lors de l'abonnement :", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        try {
+          const user = await getClientData();
+          setUserData(user);
+
+          const adherentValue = await getAdherentByClient(user.id);
+          setAdherent(adherentValue);
+
+          if (adherentValue.length > 0) {
+            const lastAdherent = adherentValue[adherentValue.length - 1];
+            setSelectedPlan(lastAdherent.type);
+          }
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des données utilisateur :",
+            error
+          );
+        }
+      } else {
+        console.error("Utilisateur non authentifié.");
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <div className="abonnement-container">
+      {/* Affichage des alertes */}
+      {alerts.map((alert) => (
+          <Alert
+            key={alert.id}
+            message={alert.message}
+            link={alert.link}
+            linkText={alert.linkText}
+            type={alert.type}
+            onClose={() => removeAlert(alert.id)}
+          />
+        ))}
       <h1 className="fs-300 fs-poppins text-red">
         Choisissez votre plan d'abonnement
       </h1>

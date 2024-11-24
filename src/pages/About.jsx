@@ -22,7 +22,7 @@ function AboutContent() {
       </div>
       <div className="about-info">
         <h3 className="fs-poppins fs-200 text-red">
-          Welcome To Digital Libary
+          Welcome To Digital Library
         </h3>
         <h1 className="fs-montserrat fs-500 text-black">Who We Are?</h1>
         <p className="fs-montserrat fs-100">
