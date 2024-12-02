@@ -1,0 +1,122 @@
+.profileContainer {
+  width: 500px;
+  /* max-width: 500px; */
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.profileContainer h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.profileContainer .profileCard {
+  padding: 20px;
+}
+
+.profileContainer .profileInfo {
+  margin-bottom: 15px;
+}
+
+.profileContainer label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.profileContainer p,
+.profileContainer input {
+  margin: 0;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.profileContainer input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.profileContainer .profileActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profileContainer button {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profileContainer button:hover {
+  opacity: 0.9;
+}
+
+.profileContainer button:nth-child(1) {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.profileContainer button:nth-child(2) {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.deleteBtn {
+  background-color: red;
+}
+
+.image-section {
+  margin-top: 20px;
+}
+
+.image-section {
+  margin-top: 20px;
+  background: hsl(var(--clr-white));
+  width: 30vh; /* Largeur de la section */
+  height: 30vh; /* Hauteur de la section */
+  border-radius: 10px;
+  display: flex; /* Utiliser Flexbox pour centrer le contenu */
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement */
+  position: relative; /* Position relative pour le bouton */
+  overflow: hidden; /* Cacher tout débordement */
+  margin: auto;
+}
+
+#mainImagePreview {
+  cursor: pointer;
+  border-radius: 10px;
+  width: 90%; /* Prendre toute la largeur de la section */
+  height: 90%; /* Prendre toute la hauteur de la section */
+  object-fit: cover; /* Couvrir tout l'espace sans déformer l'image */
+  display: none; /* Masqué par défaut, affiché quand l'image est sélectionnée */
+}
+
+.chooseMainImage {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  color: white; /* Changer la couleur du texte en blanc */
+  background: var(--blue); /* Utiliser une couleur de fond attrayante */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* Arrondir le bouton pour un style circulaire */
+  border: none; /* Enlever la bordure par défaut */
+  transition: background 0.3s; /* Ajouter une transition pour l'effet hover */
+}
+
+.chooseMainImage:hover {
+  background: hsl(var(--clr-blue) / 0.9); /* Changer la couleur au survol */
+}

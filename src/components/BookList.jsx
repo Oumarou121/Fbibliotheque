@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { BiHeart } from "react-icons/bi";
 import { FaBook, FaHandHolding } from "react-icons/fa";
 import "../styles/BookList.css";
-import { getClientData, isInFavorite, isInCart } from "../Api";
+import { getClientData, isInFavorite, isInCart, addEmprunt } from "../Api";
 import Alert from "./Alert";
 import Modal from "./Modal";
 
 export const BookList = ({ name, books, onBorrowBook }) => {
   const [userData, setUserData] = useState(null);
-  const [alerts, setAlerts] = useState([]); // Gestion des alertes
+  const [alerts, setAlerts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentBook, setCurrentBook] = useState(null);
 
@@ -57,14 +57,14 @@ export const BookList = ({ name, books, onBorrowBook }) => {
       if (result === "added") {
         addAlert(
           "Le livre a été ajouté au panier.",
-          "/cart.html",
+          "/cart",
           "Voir votre panier.",
           "info"
         );
       } else if (result === "removed") {
         addAlert(
           "Le livre a été retiré du panier.",
-          "/cart.html",
+          "/cart",
           "Voir votre panier.",
           "info"
         );
@@ -86,6 +86,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
     try {
       // Logique pour emprunter le livre
       // await onBorrowBook(currentBook.id);
+      await addEmprunt(userData?.id, currentBook.id);
       addAlert(
         "Le livre a été emprunté avec succès.",
         "/emprunts",
@@ -94,8 +95,27 @@ export const BookList = ({ name, books, onBorrowBook }) => {
       );
       setIsModalOpen(false); // Fermer la modale après l'emprunt
     } catch (error) {
+      const e = error.toString();
       console.error("Erreur lors de l'emprunt du livre", error);
-      addAlert("Une erreur est survenue. Veuillez réessayer.", null, null);
+      var result = "";
+      if (e.includes("Emprunt déjà existant pour le client ID:")) {
+        result = "Vous avez déjà emprunt ce livre";
+      }
+      if (e.includes("Livre non disponible : Quantité insuffisante")) {
+        result = "Livre non disponible : Quantité insuffisante";
+      }
+      if (e.includes("Adhérent non trouvé pour le client ID:")) {
+        result = "Veillez vous souscrire a un abonnement";
+      }
+      if (
+        e.includes(
+          "Le nombre d'emprunts disponibles pour cet adhérent est épuisé"
+        )
+      ) {
+        result =
+          "Le nombre d'emprunts disponibles pour cet abonnement est épuisé";
+      }
+      addAlert(result, null, null, "warning");
     }
   };
 
@@ -196,7 +216,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
 };
 
 // Composant pour afficher l'image du livre
-export const BookImage = ({ bookId = 1 }) => {
+export const BookImage = ({ bookId = 1, type = "normal" }) => {
   const [imageUrl, setImageUrl] = useState(null);
   useEffect(() => {
     let isMounted = true;
@@ -229,7 +249,7 @@ export const BookImage = ({ bookId = 1 }) => {
   return (
     <div>
       {imageUrl ? (
-        <img src={imageUrl} className="book-image" alt="Book" />
+        <img src={imageUrl} className={`book-image-${type}`} alt="Book" />
       ) : (
         <p>Loading image...</p>
       )}

@@ -1,0 +1,13 @@
+.messages-page {
+  padding: 20px;
+}
+
+.messages-table th,
+.messages-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.messages-table th {
+  background-color: #f4f4f4;
+}

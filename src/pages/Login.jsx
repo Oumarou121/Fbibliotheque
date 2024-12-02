@@ -726,7 +726,8 @@ function FRegister({
         const password = password1.value.trim();
         const clientData = {
           nom: name,
-          prenom: "",
+          adresse: "",
+          telephone: "",
           email: email,
           password: password,
         };

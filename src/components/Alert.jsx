@@ -5,7 +5,7 @@ const Alert = ({
   message,
   link,
   linkText,
-  type, // Types: info, success, error, warning
+  type = "warning", // Types: info, success, error, warning
   duration = 5000,
   onClose,
 }) => {
@@ -15,8 +15,6 @@ const Alert = ({
     const fadeOutTimer = setTimeout(() => {
       setAnimationClass("fade-out");
     }, duration - 500); // Transition commence avant la suppression
-
-    console.log(type);
 
     const removeTimer = setTimeout(() => {
       if (onClose) {

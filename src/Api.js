@@ -22,6 +22,44 @@ export const registerClient = async (clientData) => {
   }
 };
 
+export const createClient = async (clientData) => {
+  try {
+    const response = await fetch(`${BASE_URL}/admin/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(clientData),
+    });
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+    const id = await response.text();
+    // localStorage.setItem("authToken", token);
+    return id;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteClient = async (clientId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${clientId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const loginClient = async (loginData) => {
   try {
     const response = await fetch(`${BASE_URL}/login`, {
@@ -360,11 +398,13 @@ export const RemoveFromFavorite = async (favoriteId) => {
 
 export const getTotalQuantityInCart = async (Id) => {
   const bagQuantityElement = document.getElementById("cart-box");
-  try {
-    const cart = await GetCartByClient(Id);
-    bagQuantityElement.setAttribute("data-quantity", cart.length);
-  } catch (error) {
-    bagQuantityElement.setAttribute("data-quantity", 0);
+  if (bagQuantityElement) {
+    try {
+      const cart = await GetCartByClient(Id);
+      bagQuantityElement.setAttribute("data-quantity", cart.length);
+    } catch (error) {
+      bagQuantityElement.setAttribute("data-quantity", 0);
+    }
   }
 };
 
@@ -418,6 +458,33 @@ export const addAdherent = async (Data) => {
       const error = await response.text();
       throw new Error(error);
     }
+    // console.log(response.json());
+    // return await response.json();
+  } catch (error) {
+    throw new Error(`Erreur lors de l'ajout de l'adherent: ${error.message}`);
+  }
+};
+
+export const updateAdherent = async (Data) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch("http://localhost:8080/api/adherents", {
+      method: "PUT",
+      headers: {
+        // Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Data),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
 
     return await response.json();
   } catch (error) {
@@ -452,6 +519,301 @@ export const deleteAdherentByClient = async (clientId) => {
   } catch (error) {
     throw new Error(
       `Erreur lors de la suppression de l'adherent: ${error.message}`
+    );
+  }
+};
+
+export const addEmprunt = async (clientId, livreId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch("http://localhost:8080/api/emprunts", {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ clientId, livreId }),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Erreur lors de l'emprunt du livre: ${error.message}`);
+  }
+};
+
+export const getEmprunt = async (clientId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/emprunts/${clientId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la recuperation des emprunts : ${error.message}`
+    );
+  }
+};
+
+export const deleteEmprunt = async (empruntId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/emprunts/${empruntId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    console.log("Emprunt supprimer");
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la recuperation des emprunts : ${error.message}`
+    );
+  }
+};
+
+export const getLivreById = async (livreId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/livres/${livreId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la recuperation du livre : ${error.message}`
+    );
+  }
+};
+
+export const getLivres = async () => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/livres`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API Error (${response.status}): ${errorText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur dans getLivres:", error);
+    throw new Error(
+      `Erreur lors de la récupération des livres : ${error.message}`
+    );
+  }
+};
+
+export const updateClient = async (clientId, clientData) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/client/${clientId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(clientData),
+      }
+    );
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Erreur lors de la mise à jour (${response.status}): ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur dans updateClient:", error);
+    throw new Error(`Erreur lors de la mise à jour : ${error.message}`);
+  }
+};
+
+export const getClients = async () => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch("http://localhost:8080/api/client", {
+      method: "GET",
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Erreur lors de la récupération des clients (${response.status}): ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur dans getClients:", error);
+    throw new Error(
+      `Erreur lors de la recuperation des livres : ${error.message}`
+    );
+  }
+};
+
+export const createLivre = async (Data) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch("http://localhost:8080/api/livres", {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      // body: JSON.stringify(Data),
+      body: JSON.stringify(Data),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Erreur lors de la creation du livre (${response.status}): ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur dans createLivre:", error);
+    throw new Error(`Erreur lors de la création du livre : ${error.message}`);
+  }
+};
+
+export const updateLivre = async (livreId, Data) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/livres/${livreId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(Data),
+      }
+    );
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Erreur lors de la mise à jour du livre (${response.status}): ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur dans updateLivre:", error);
+    throw new Error(
+      `Erreur lors de la mise à jour du livre : ${error.message}`
+    );
+  }
+};
+
+export const deleteLivre = async (livreId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/livres/${livreId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Erreur lors de la suppression du livre (${response.status}): ${errorText}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur dans updateLivre:", error);
+    throw new Error(
+      `Erreur lors de la suppression du livre : ${error.message}`
     );
   }
 };

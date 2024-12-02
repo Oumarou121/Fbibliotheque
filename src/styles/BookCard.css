@@ -1,0 +1,42 @@
+.book-cart {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 0.2rem;
+  margin: 0 3rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  /* display: grid;
+  width: 400px;
+  grid-template-columns: 1fr; */
+  align-items: center;
+}
+
+.first {
+  display: flex;
+  flex-direction: row;
+}
+
+.name {
+  padding-left: 1rem;
+}
+
+.book-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.book-card p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.book-cart:hover {
+  /* transform: translateY(-10px); */
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}

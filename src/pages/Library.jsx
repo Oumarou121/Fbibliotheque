@@ -1,8 +1,8 @@
 import TopBody from "../components/TopBody";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "../styles/Library.css";
 import { BookList } from "../components/BookList";
+import { getLivres } from "../Api.js";
 
 function Library() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,16 +10,17 @@ function Library() {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    // Récupérer les livres depuis l'API Spring Boot
-    axios
-      .get("http://localhost:8080/api/livres")
-      .then((response) => {
-        setBooks(response.data);
-        setFilteredBooks(response.data);
-      })
-      .catch((error) =>
-        console.error("Erreur lors de la récupération des livres :", error)
-      );
+    const livres = async () => {
+      try {
+        const books = await getLivres();
+        setBooks(books);
+        setFilteredBooks(books);
+      } catch (error) {
+        console.error(`Erreur lors de la récupération des livre : ${error}`);
+      }
+    };
+
+    livres();
   }, []);
 
   const handleAddToCart = (bookId) => {

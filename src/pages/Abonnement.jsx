@@ -2,13 +2,8 @@ import React, { useState, useEffect } from "react";
 import TopBody from "../components/TopBody";
 import "../styles/Abonnement.css";
 import { FaCheckCircle } from "react-icons/fa";
-import {
-  getAdherentByClient,
-  getClientData,
-  addAdherent,
-} from "../Api";
+import { getAdherentByClient, getClientData, addAdherent } from "../Api";
 import Alert from "../components/Alert";
-
 
 const plans = [
   {
@@ -67,17 +62,13 @@ function AbonnementContent() {
       return;
     }
 
-    if (adherent.length > 0) {
+    if (adherent.length > 0 && adherent[adherent.length - 1].nbrEmprunt > 0) {
       console.log(
         "Utilisateur déjà abonné, type actuel :",
         adherent[adherent.length - 1].type
       );
-      addAlert(
-        "Utilisateur déjà abonné",
-        "",
-        "",
-        "warning"
-      );
+      addAlert("Utilisateur déjà abonné", "", "", "warning");
+      return;
     }
 
     // Ajouter un nouvel abonnement
@@ -86,13 +77,14 @@ function AbonnementContent() {
       console.log("Abonnement ajouté pour le client :", userData?.id);
       setSelectedPlan(planId);
       addAlert(
-        `Abonnement ajouté pour le client :", ${userData?.nom}`,
+        `Abonnement ajouté pour le client : " ${userData?.nom}`,
         "",
         "",
-        "info"
+        "success"
       );
     } catch (error) {
       console.error("Erreur lors de l'abonnement :", error);
+      addAlert(error.toString(), "", "", "warning");
     }
   };
 
@@ -106,8 +98,12 @@ function AbonnementContent() {
 
           const adherentValue = await getAdherentByClient(user.id);
           setAdherent(adherentValue);
+          console.log(adherent);
 
-          if (adherentValue.length > 0) {
+          if (
+            adherentValue.length > 0 &&
+            adherentValue[adherentValue.length - 1].nbrEmprunt > 0
+          ) {
             const lastAdherent = adherentValue[adherentValue.length - 1];
             setSelectedPlan(lastAdherent.type);
           }
@@ -129,15 +125,15 @@ function AbonnementContent() {
     <div className="abonnement-container">
       {/* Affichage des alertes */}
       {alerts.map((alert) => (
-          <Alert
-            key={alert.id}
-            message={alert.message}
-            link={alert.link}
-            linkText={alert.linkText}
-            type={alert.type}
-            onClose={() => removeAlert(alert.id)}
-          />
-        ))}
+        <Alert
+          key={alert.id}
+          message={alert.message}
+          link={alert.link}
+          linkText={alert.linkText}
+          type={alert.type}
+          onClose={() => removeAlert(alert.id)}
+        />
+      ))}
       <h1 className="fs-300 fs-poppins text-red">
         Choisissez votre plan d'abonnement
       </h1>
