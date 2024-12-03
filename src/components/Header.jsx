@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/Header.css";
-import { logoutClient, getClientData, getTotalQuantityInCart } from "../Api";
+import {
+  logoutClient,
+  getClientData,
+  getTotalQuantityInCart,
+  getTotalMessageInCart,
+} from "../Api";
 import { useNavigate } from "react-router-dom";
 
 function Header() {
@@ -27,6 +32,10 @@ function Header() {
     navigate("/cart");
   };
 
+  const navigation1 = () => {
+    navigate("/messages");
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("authToken");
@@ -37,6 +46,7 @@ function Header() {
           setUserData(user);
           // Récupérer la quantité totale dans le panier
           await getTotalQuantityInCart(user?.id);
+          await getTotalMessageInCart();
         } catch (error) {
           console.error(
             "Erreur lors de la récupération des données utilisateur :",
@@ -113,6 +123,18 @@ function Header() {
                   onClick={() => handleLinkClick("/admin/products")}
                 >
                   Products
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  className={`fs-100 fs-montserrat bold-500 ${
+                    activeLink === "/admin/loans" ? "active" : ""
+                  }`}
+                  to="/admin/loans"
+                  onClick={() => handleLinkClick("/admin/loans")}
+                >
+                  Loans
                 </Link>
               </li>
 
@@ -295,7 +317,12 @@ function Header() {
             data-quantity="0"
             onClick={navigation}
           ></i>
-          <i className="uil uil-envelope-check" data-quantity="0"></i>
+          <i
+            id="message-box"
+            className="uil uil-envelope-check"
+            data-quantity="0"
+            onClick={navigation1}
+          ></i>
         </div>
 
         <div className="mobile-open-btn" onClick={toggleMenu}>

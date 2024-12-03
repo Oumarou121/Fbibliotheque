@@ -99,3 +99,15 @@
   color: #000;
   cursor: pointer;
 }
+
+textarea {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+}
+
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}

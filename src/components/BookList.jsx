@@ -86,7 +86,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
     try {
       // Logique pour emprunter le livre
       // await onBorrowBook(currentBook.id);
-      await addEmprunt(userData?.id, currentBook.id);
+      await addEmprunt({clientId: userData?.id,livreId: currentBook.id});
       addAlert(
         "Le livre a été emprunté avec succès.",
         "/emprunts",

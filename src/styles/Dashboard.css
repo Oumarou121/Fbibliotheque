@@ -112,6 +112,11 @@ table tr:nth-child(even) {
   background-color: #f44336;
 }
 
+.table-actions .send-btn {
+  background-color: #36f459;
+  font-size: 10px;
+}
+
 /* Responsive design */
 @media (max-width: 59em) {
   .admin-container {

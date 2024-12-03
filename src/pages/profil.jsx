@@ -31,7 +31,7 @@ const UserProfile = () => {
         const lastAdherent = adherentValue[adherentValue.length - 1];
         setAdherent(lastAdherent);
         const typeMapping = ["Basique", "Standard", "Premium"];
-        setTypeAdherent(typeMapping[lastAdherent?.type] || "Inconnu");
+        setTypeAdherent(typeMapping[lastAdherent?.type] || "Pas d'abonnement");
       } catch (error) {
         addAlert(
           "Erreur de chargement des données utilisateur.",

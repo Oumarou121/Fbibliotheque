@@ -43,7 +43,7 @@ const CartBody = () => {
     try {
       // Logique pour emprunter le livre
       // await onBorrowBook(currentBook.id);
-      await addEmprunt(userData?.id, currentBook.livreId);
+      await addEmprunt({clientId: userData?.id, livreId: currentBook.livreId});
       removeHandler(currentBook.id, false);
       addAlert(
         "Le livre a été emprunté avec succès.",

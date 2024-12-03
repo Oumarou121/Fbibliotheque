@@ -242,3 +242,19 @@ td button {
   border-radius: 10px;
   cursor: pointer;
 }
+
+/* .fin{
+  background-color: red;
+}
+
+.veille{
+  background-color: yellow;
+} */
+
+.fin {
+  color: red;
+  font-weight: bold;
+}
+.veille {
+  color: orange;
+}

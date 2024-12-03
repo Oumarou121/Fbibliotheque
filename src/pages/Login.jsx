@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Login.css";
-import { registerClient, loginClient } from "../Api.js";
+import { registerClient, loginClient, getClientData } from "../Api.js";
 import { useLoader } from "../LoaderContext";
 import { useNavigate } from "react-router-dom";
 
@@ -72,12 +72,15 @@ const LoginModal = () => {
       setIsPasswordVisible3(!isPasswordVisible3);
     }
   };
+  const handleGoBack = () => {
+    navigate(-1); // -1 permet de revenir à la page précédente dans l'historique
+  };
   return (
     <div id="login-modal">
       <Icons />
       <div className="modal">
         <div className="top-form">
-          <div className="close-modal" onClick={loginHandler}>
+          <div className="close-modal" onClick={handleGoBack}>
             &#10006;
           </div>
         </div>
@@ -288,7 +291,12 @@ function FLogin({
           const token = await loginClient(loginData);
           localStorage.setItem("authToken", token);
           console.log("Connexion réussie, token:", token);
-          navigate("/");
+          const data = await getClientData();
+          if (data.role === 'admin') {
+            navigate("/admin");
+          }else{
+            navigate("/");
+          }
         } catch (err) {
           setPasswordError(err.message);
           setLoginAttempts((prev) => prev + 1);
@@ -735,7 +743,13 @@ function FRegister({
         try {
           const registeredClient = await registerClient(clientData);
           console.log("Client enregistré:", registeredClient);
-          navigate("/");
+          const data = await getClientData();
+          if (data.role === 'admin') {
+            navigate("/admin");
+          }else{
+            navigate("/");
+          }
+          
         } catch (err) {
           error2.textContent = err.message;
           password2.classList.add("error");

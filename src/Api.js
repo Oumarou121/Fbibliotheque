@@ -408,6 +408,20 @@ export const getTotalQuantityInCart = async (Id) => {
   }
 };
 
+export const getTotalMessageInCart = async () => {
+  const bagQuantityElement = document.getElementById("message-box");
+  const token = localStorage.getItem("authToken");
+  if (bagQuantityElement && token) {
+    try {
+      const data = await getClientData();
+      const message = await getMessagesByReceiver(data?.email);
+      bagQuantityElement.setAttribute("data-quantity", message.length);
+    } catch (error) {
+      bagQuantityElement.setAttribute("data-quantity", 0);
+    }
+  }
+};
+
 export const getAdherentByClient = async (clientId) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
@@ -523,7 +537,7 @@ export const deleteAdherentByClient = async (clientId) => {
   }
 };
 
-export const addEmprunt = async (clientId, livreId) => {
+export const addEmprunt = async (Data) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
     throw new Error("Utilisateur non authentifié.");
@@ -536,7 +550,7 @@ export const addEmprunt = async (clientId, livreId) => {
         Authorization: token,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ clientId, livreId }),
+      body: JSON.stringify(Data),
     });
 
     if (!response.ok) {
@@ -547,6 +561,64 @@ export const addEmprunt = async (clientId, livreId) => {
     return await response.json();
   } catch (error) {
     throw new Error(`Erreur lors de l'emprunt du livre: ${error.message}`);
+  }
+};
+
+// export const updateEmprunt = async (empruntId, Data) => {
+//   const token = localStorage.getItem("authToken");
+//   if (!token) {
+//     throw new Error("Utilisateur non authentifié.");
+//   }
+
+//   try {
+//     const response = await fetch(`http://localhost:8080/api/emprunts/${empruntId}`, {
+//       method: "PUT",
+//       headers: {
+//         Authorization: token,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(Data),
+//     });
+
+//     if (!response.ok) {
+//       const error = await response.text();
+//       throw new Error(error);
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     throw new Error(
+//       `Erreur lors de la mise à jour de l'emprunt du livre: ${error.message}`
+//     );
+//   }
+// };
+
+export const updateEmprunt = async (Data) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8080/api/emprunts`, {
+      method: "PUT",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Data),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la mise à jour de l'emprunt du livre: ${error.message}`
+    );
   }
 };
 
@@ -567,6 +639,34 @@ export const getEmprunt = async (clientId) => {
         },
       }
     );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la recuperation des emprunts : ${error.message}`
+    );
+  }
+};
+
+export const getAllEmprunt = async () => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8080/api/emprunts`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -814,6 +914,168 @@ export const deleteLivre = async (livreId) => {
     console.error("Erreur dans updateLivre:", error);
     throw new Error(
       `Erreur lors de la suppression du livre : ${error.message}`
+    );
+  }
+};
+
+export const getAllMessages = async () => {
+  try {
+    const response = await fetch("http://localhost:8080/api/messages", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la récupération des messages: ${error.message}`
+    );
+  }
+};
+
+export const getMessagesByReceiver = async (receiver) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/messages/${receiver}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la récupération des messages pour ${receiver}: ${error.message}`
+    );
+  }
+};
+
+export const deleteMessage = async (messageId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/messages/${messageId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la suppression du message: ${error.message}`
+    );
+  }
+};
+
+export const sendClientMessage = async (message) => {
+  try {
+    const response = await fetch("http://localhost:8080/api/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Erreur lors de l'envoi du message: ${error.message}`);
+  }
+};
+
+export const sendAdminMessage = async (message) => {
+  try {
+    const response = await fetch("http://localhost:8080/api/messages/admin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Erreur lors de l'envoi du message: ${error.message}`);
+  }
+};
+
+export const getEmailById = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/client/email/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.text();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la récupération du email: ${error.message}`
+    );
+  }
+};
+
+export const getTitreById = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/livres/titre/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return await response.text();
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la récupération du titre: ${error.message}`
     );
   }
 };

@@ -2,9 +2,15 @@ import React, { useState, useEffect } from "react";
 import "../styles/Home.css";
 import { BookList, BookImage } from "../components/BookList";
 import { getLivres } from "../Api.js";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [books, setBooks] = useState([]);
+  const navigate = useNavigate();
+
+  const navigation = () => {
+    navigate("/library#content");
+  };
 
   useEffect(() => {
     const livres = async () => {
@@ -64,7 +70,7 @@ function Home() {
 
       {/* Bouton "Voir plus" */}
       <section className="load-more">
-        <button className="load-more-btn">Voir plus</button>
+        <button className="load-more-btn" onClick={navigation}>Voir plus</button>
       </section>
     </div>
   );

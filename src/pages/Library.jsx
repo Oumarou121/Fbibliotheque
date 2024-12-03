@@ -45,6 +45,7 @@ function Library() {
     <>
       <TopBody visibility="true" name="Library" />
       <div className="library-container">
+        <a id="content"></a>
         <section className="search-section">
           <input
             type="text"
