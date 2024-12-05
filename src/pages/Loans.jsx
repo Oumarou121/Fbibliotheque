@@ -75,7 +75,7 @@ const LoansPage = () => {
           setLoans(loans);
           setFilteredLoans(loans);
         } catch (error) {
-          console.error("Erreur lors de la récupération des clients", error);
+          //console.error("Erreur lors de la récupération des clients", error);
           setLoans([]);
         }
       }
@@ -125,7 +125,7 @@ const LoansPage = () => {
         admin: true,
       };
 
-      console.log(MessageData);
+      //console.log(MessageData);
 
       await sendAdminMessage(MessageData);
       addAlert(
@@ -135,7 +135,7 @@ const LoansPage = () => {
         "success"
       );
     } catch (error) {
-      console.error("Erreur lors de l'envoi du message", error);
+      //console.error("Erreur lors de l'envoi du message", error);
       addAlert("Erreur lors de l'envoi du message.", "", "", "error");
     } finally {
       setLoading(false);

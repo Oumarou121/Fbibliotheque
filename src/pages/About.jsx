@@ -4,6 +4,7 @@ import React from "react";
 import TopBody from "../components/TopBody";
 import "../styles/About.css";
 import AboutImage from "../assets/images/about-us.png";
+import { useNavigate } from "react-router-dom";
 
 function About() {
   return (
@@ -15,10 +16,15 @@ function About() {
 }
 
 function AboutContent() {
+  const navigate = useNavigate();
+  const navigation = () => {
+    navigate("/library");
+  };
+
   return (
     <section className="about-section grid">
-      <div>
-        <img src={AboutImage} alt="" />
+      <div className="aboutImg">
+        <img src={AboutImage} alt="About Us" />
       </div>
       <div className="about-info">
         <h3 className="fs-poppins fs-200 text-red">
@@ -26,21 +32,25 @@ function AboutContent() {
         </h3>
         <h1 className="fs-montserrat fs-500 text-black">Who We Are?</h1>
         <p className="fs-montserrat fs-100">
-          When, while the lovely valley teems with vapour around me, and the
-          meridian sun strikes the upper surface of the impenetrable foliage of
-          my trees, and but a few stray, <br />
-          <br />
-          gleams steal into the inner sanctuary, I throw myself down among the
-          tall grass by the trickling stream; and, as I lie close to the earth,
-          a thousand unknown plants are noticed by me . when I hear the buzz of
-          the little world among the stalks, and grow familiar with the
-          countless indescribable forms of the insects and flies, then I feel
-          the presence.
+          Welcome to our online library, where the world of books is just a
+          click away! We are committed to providing you with a vast and diverse
+          collection of books, offering knowledge, inspiration, and an
+          unforgettable reading experience. Whether you're a fiction lover, a
+          student, or a curious mind, our library is designed to meet your
+          needs.
         </p>
-
+        <p className="fs-montserrat fs-100">
+          Enjoy the convenience of borrowing books online with the option to
+          have them delivered to your doorstep or pick them up at one of our
+          partner libraries. Discover new releases, timeless classics, and books
+          tailored to your interests, all in one place.
+        </p>
         <div className="about-btn">
-          <button className="large-btn bg-red text-white fs-poppins">
-            Emprunt Now
+          <button
+            className="large-btn bg-red text-white fs-poppins"
+            onClick={navigation}
+          >
+            Borrow Now
           </button>
         </div>
       </div>

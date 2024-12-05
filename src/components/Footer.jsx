@@ -4,7 +4,7 @@ import React from "react";
 import "../styles/Footer.css";
 
 function Footer({ isAdmin = false }) {
-  // console.log(isAdmin);
+  // //console.log(isAdmin);
   return (
     <>
       <section className={`footer grid ${isAdmin ? "cache" : "a"}`}>
@@ -42,7 +42,7 @@ function Footer({ isAdmin = false }) {
             </li>
             <li>
               <a className="fs-100 fs-montserrat text-black" href="/about.html">
-                Abonnement
+                Subscription
               </a>
             </li>
             <li>
@@ -64,8 +64,8 @@ function Footer({ isAdmin = false }) {
         <div className="contact grid">
           <h3 className="fs-poppins fs-200 bold-800">Contact</h3>
           <p className="fs-montserrat">
-            +99 (0) 101 0000 888 Patricie C. Amedee 4401 Waldeck Street
-            Grapevine Nashville, Tx 76051
+            +216 56 193 506 Oumarou M. Monastir Cité C2 5000 Mosque Aloumrane
+            1x76051
           </p>
         </div>
 

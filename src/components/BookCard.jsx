@@ -15,7 +15,7 @@ const BookCard = ({ book, handler1, handler2, isCart, isFavorites }) => {
         setTitre(result?.titre || "Titre inconnu");
         setAuteur(result?.auteur || "Auteur inconnu");
       } catch (error) {
-        console.error("Erreur lors de la récupération du livre", error);
+        //console.error("Erreur lors de la récupération du livre", error);
       }
     };
 
@@ -30,7 +30,6 @@ const BookCard = ({ book, handler1, handler2, isCart, isFavorites }) => {
           <h3>{titre}</h3>
           <p>{auteur}</p>
         </div>
-        
       </div>
       <DateRetour isFavorites={isFavorites} isCart={isCart} book={book} />
       <div className="book-actions">

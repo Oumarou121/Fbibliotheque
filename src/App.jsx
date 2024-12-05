@@ -29,13 +29,20 @@ import { LoaderProvider } from "./LoaderContext";
 import Loader from "./components/Loader";
 
 function AppContent() {
-  const location = useLocation(); // Hook ici, garanti dans le contexte du Router
-  const hideHeaderFooter = location.pathname === "/login" || "/messages"; // Vérifie si on est sur `/profil`
-  const isAdminPage = location.pathname.includes("admin"); // Vérifie si l'URL contient "admin"
-  const hideHeader = location.pathname === "/login";
+  const location = useLocation(); // Hook pour obtenir la localisation actuelle
+
+  // Déterminer si le header et/ou footer doivent être masqués
+  const hideHeaderFooter = ["/login", "/messages", "/profil"].includes(
+    location.pathname
+  ); // Pages spécifiques
+  const isAdminPage = location.pathname.includes("admin"); // Pages Admin
+  const hideHeader = location.pathname === "/login"; // Page Login uniquement
+
+  //console.log("Hide Header/Footer:", hideHeaderFooter);
 
   return (
     <div>
+      {/* Affiche le header sauf si hideHeader est vrai */}
       {!hideHeader && <Header />}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -56,8 +63,8 @@ function AppContent() {
         <Route path="/admin/messages" element={<MessagesPage />} />
         <Route path="*" element={<h2>404 - Page Not Found</h2>} />
       </Routes>
-      {!hideHeaderFooter && <Footer isAdmin={isAdminPage} />}{" "}
-      {/* Masque le Footer sur `/profil` */}
+      {/* Affiche le footer sauf si hideHeaderFooter est vrai */}
+      {!hideHeaderFooter && <Footer isAdmin={isAdminPage} />}
     </div>
   );
 }
@@ -67,8 +74,7 @@ function App() {
     <LoaderProvider>
       <Loader /> {/* Affichage du Loader */}
       <Router>
-        <AppContent />{" "}
-        {/* AppContent utilise maintenant useLocation dans le bon contexte */}
+        <AppContent />
       </Router>
     </LoaderProvider>
   );

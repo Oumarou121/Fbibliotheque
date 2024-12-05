@@ -28,7 +28,7 @@ function ShowMessage({
     setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id));
   };
 
-  // console.log(currentMessage);
+  // //console.log(currentMessage);
 
   useEffect(() => {
     const fetchMessageData = async () => {
@@ -71,7 +71,7 @@ function ShowMessage({
   const saveChanges = async () => {
     // if (!currentMessage) {
     if (!message?.message || !message?.recepteur) {
-      addAlert("Veuillez remplir tous les champs.", "", "", "error");
+      addAlert("Please fill in all fields.", "", "", "error");
       return;
     }
     // }
@@ -98,7 +98,7 @@ function ShowMessage({
       }
     } catch (error) {
       addAlert("Échec de l'ajout. Réessayez.", "", "", "error");
-      console.error(error);
+      //console.error(error);
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ function ShowMessage({
       onClose();
     } catch (error) {
       addAlert("Erreur lors de la suppression du livre.", "", "", "error");
-      console.error("Erreur lors de la suppression du livre", error);
+      //console.error("Erreur lors de la suppression du livre", error);
     } finally {
       setLoading(false);
     }
@@ -177,7 +177,7 @@ function ShowMessage({
 
           <div className="profileActions">
             {loading ? (
-              <button disabled>Chargement...</button>
+              <button disabled>Loading...</button>
             ) : isDelete ? (
               <button className="deleteBtn" onClick={() => deleteAction()}>
                 Delete

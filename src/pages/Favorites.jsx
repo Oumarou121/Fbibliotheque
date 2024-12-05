@@ -14,6 +14,7 @@ const Favorite = () => {
   const [favorites, setFavorites] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Ajouter une alerte
   const addAlert = (message, link, linkText, type) => {
@@ -41,10 +42,15 @@ const Favorite = () => {
       );
 
       if (isShow) {
-        addAlert("Le livre a été supprimé des favoris.", null, null, "info");
+        addAlert(
+          "The book has been removed from favorites.",
+          null,
+          null,
+          "info"
+        );
       }
     } catch (error) {
-      console.error("Erreur lors de la suppression du livre : ", error);
+      //console.error("Error deleting book: ", error);
     }
   };
 
@@ -54,41 +60,77 @@ const Favorite = () => {
       const clientId = userData?.id;
       const quantity = 1;
       const result = await isInCart({ clientId, livreId, quantity });
-      console.log(clientId, livreId, quantity);
+      //console.log(clientId, livreId, quantity);
       if (result === "added") {
         addAlert(
-          "Le livre a été ajouté au panier.",
+          "The book has been added to the cart.",
           "/cart",
-          "Voir votre panier.",
+          "View your cart.",
           "info"
         );
       } else if (result === "removed") {
         addAlert(
-          "Le livre a été retiré du panier.",
+          "The book has been removed from the cart.",
           "/cart",
-          "Voir votre panier.",
+          "View your cart.",
           "info"
         );
       }
     } catch (error) {
-      console.error("Erreur lors de la gestion du panier :", error);
-      addAlert("Une erreur est survenue.", null, null);
+      //console.error("Error while managing the cart:", error);
+      addAlert("An error has occurred.", null, null);
     }
   };
 
+  // useEffect(() => {
+  //   const fetchFavorites = async () => {
+  //     const token = localStorage.getItem("authToken");
+  //     if (!token) {
+  //       throw new Error("Unauthenticated user.");
+  //     }
+  //     try {
+  //       const user = await getClientData();
+  //       const books = await GetFavoritesByClient(user?.id);
+  //       setFavorites(books);
+  //       setUserData(user);
+  //     } catch (error) {
+  //       //console.log("Error getting favorites", error);
+  //     }
+  //   };
+
+  //   fetchFavorites();
+  // }, []);
+
   useEffect(() => {
     const fetchFavorites = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Utilisateur non authentifié.");
-      }
+      setIsLoading(true);
       try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          addAlert(
+            "Please log in to view your Favorites.",
+            "/login",
+            "Login",
+            "warning"
+          );
+          setIsLoading(false);
+          return;
+        }
+
         const user = await getClientData();
         const books = await GetFavoritesByClient(user?.id);
         setFavorites(books);
         setUserData(user);
       } catch (error) {
-        console.log("Error getting favorites", error);
+        //console.error("Error getting favorites", error);
+        addAlert(
+          "Failed to fetch favorites books. Please try again later.",
+          null,
+          null,
+          "error"
+        );
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -113,7 +155,9 @@ const Favorite = () => {
           <p>Shopping Favorites</p>
         </div>
 
-        {favorites.length > 0 ? (
+        {isLoading ? (
+          <div className="loading">Loading...</div> // Afficher le message de chargement
+        ) : favorites.length > 0 ? (
           <section className="cartContent">
             {favorites.map((book) => (
               <BookCard
@@ -140,7 +184,7 @@ const Favorite = () => {
 function Favorites() {
   return (
     <>
-      <TopBody visibility="true" name="Favoris" />
+      <TopBody visibility="true" name="Favorites" />
       <Favorite />
     </>
   );

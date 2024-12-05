@@ -8,23 +8,23 @@ import Alert from "../components/Alert";
 const plans = [
   {
     id: 1,
-    name: "Basique",
+    name: "Basic",
     price: "10DNT/mois",
-    features: ["Accès limité", "5 emprunts/mois", "Pas de support premium"],
+    features: ["Limited access", "5 loans/month", "No premium support"],
     isPremium: false,
   },
   {
     id: 2,
     name: "Standard",
     price: "25DNT/mois",
-    features: ["Accès complet", "15 emprunts/mois", "Support par email"],
+    features: ["Full access", "15 loans/month", "Email support"],
     isPremium: false,
   },
   {
     id: 3,
     name: "Premium",
     price: "50DNT/mois",
-    features: ["Accès complet", "35 emprunts/mois", "Support 24/7"],
+    features: ["Full access", "35 loans/month", "24/7 support"],
     isPremium: true,
   },
 ];
@@ -51,10 +51,9 @@ function AbonnementContent() {
   const handleSubscribe = async (planId) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
-      console.error("Utilisateur non authentifié.");
-      alert("Vous devez être connecté pour vous abonner.");
+      //console.error("Unauthenticated user.");
       addAlert(
-        "Vous devez être connecté pour vous abonner.",
+        "You must be logged in to subscribe.",
         "",
         "",
         "warning"
@@ -63,27 +62,27 @@ function AbonnementContent() {
     }
 
     if (adherent.length > 0 && adherent[adherent.length - 1].nbrEmprunt > 0) {
-      console.log(
-        "Utilisateur déjà abonné, type actuel :",
-        adherent[adherent.length - 1].type
-      );
-      addAlert("Utilisateur déjà abonné", "", "", "warning");
+      //console.log(
+      //  "Utilisateur déjà abonné, type actuel :",
+      //  adherent[adherent.length - 1].type
+      //);
+      addAlert("User already subscribed", "", "", "warning");
       return;
     }
 
     // Ajouter un nouvel abonnement
     try {
       await addAdherent({ clientId: userData?.id, type: planId });
-      console.log("Abonnement ajouté pour le client :", userData?.id);
+      //console.log("Abonnement ajouté pour le client :", userData?.id);
       setSelectedPlan(planId);
       addAlert(
-        `Abonnement ajouté pour le client : " ${userData?.nom}`,
+        `Subscription added for customer : " ${userData?.nom}`,
         "",
         "",
         "success"
       );
     } catch (error) {
-      console.error("Erreur lors de l'abonnement :", error);
+      //console.error("Erreur lors de l'abonnement :", error);
       addAlert(error.toString(), "", "", "warning");
     }
   };
@@ -98,7 +97,7 @@ function AbonnementContent() {
 
           const adherentValue = await getAdherentByClient(user.id);
           setAdherent(adherentValue);
-          console.log(adherent);
+          //console.log(adherent);
 
           if (
             adherentValue.length > 0 &&
@@ -108,13 +107,13 @@ function AbonnementContent() {
             setSelectedPlan(lastAdherent.type);
           }
         } catch (error) {
-          console.error(
-            "Erreur lors de la récupération des données utilisateur :",
-            error
-          );
+          //console.error(
+          //  "Error retrieving user data:",
+          //  error
+          //);
         }
       } else {
-        console.error("Utilisateur non authentifié.");
+        //console.error("Unauthenticated user.");
       }
     };
 
@@ -135,7 +134,7 @@ function AbonnementContent() {
         />
       ))}
       <h1 className="fs-300 fs-poppins text-red">
-        Choisissez votre plan d'abonnement
+        Choose your subscription plan
       </h1>
       <div className="plans-container">
         {plans.map((plan) => (
@@ -158,7 +157,7 @@ function AbonnementContent() {
               }`}
               onClick={() => handleSubscribe(plan.id)}
             >
-              {selectedPlan === plan.id ? "Souscrit" : "Souscrire"}
+              {selectedPlan === plan.id ? "Subscribed" : "Subscribe"}
             </button>
           </div>
         ))}
@@ -170,7 +169,7 @@ function AbonnementContent() {
 function Abonnement() {
   return (
     <>
-      <TopBody visibility="true" name="Abonnement" />
+      <TopBody visibility="true" name="Subscription" />
       <AbonnementContent />
     </>
   );

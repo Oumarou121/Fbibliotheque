@@ -44,7 +44,7 @@ const MessagesPage = () => {
           setMessages(messages);
           setFilteredMessages(messages);
         } catch (error) {
-          console.error("Erreur lors de la récupération des livres", error);
+          //console.error("Error retrieving messages", error);
           setMessages([]);
         }
       }

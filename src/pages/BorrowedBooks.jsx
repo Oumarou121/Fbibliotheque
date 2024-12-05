@@ -8,7 +8,7 @@ import "../styles/Cart.css";
 const Books = () => {
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [alerts, setAlerts] = useState([]);
-  // const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Ajouter une alerte
   const addAlert = (message, link, linkText, type) => {
@@ -26,37 +26,48 @@ const Books = () => {
   const deleteEmpruntHandler = async (id) => {
     try {
       await deleteEmprunt(id);
-      addAlert("Le livre a bien été rendu.!", null, null, "success");
+      addAlert("The book was returned successfully!", null, null, "success");
       const updatedBooks = borrowedBooks.filter((book) => book.id !== id);
       setBorrowedBooks(updatedBooks);
     } catch (error) {
-      console.error("Error deleting emprunt", error);
-      addAlert(
-        "Erreur lors de la suppression du livre.",
-        null,
-        null,
-        "warning"
-      );
+      //console.error("Error deleting emprunt", error);
+      addAlert("Error deleting book.", null, null, "warning");
     }
   };
 
   useEffect(() => {
-    const fetchBorrowedBooks = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Utilisateur non authentifié.");
-      }
+    const fetchBorrowBooks = async () => {
+      setIsLoading(true);
       try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          addAlert(
+            "Please log in to view your Borrowed Books.",
+            "/login",
+            "Login",
+            "warning"
+          );
+          setIsLoading(false);
+          return;
+        }
+
         const user = await getClientData();
         const books = await getEmprunt(user?.id);
         setBorrowedBooks(books);
-        // setUserData(user);
       } catch (error) {
-        console.log("Error getting emprunts", error);
+        //console.error("Error getting cart", error);
+        addAlert(
+          "Failed to fetch borrow books. Please try again later.",
+          null,
+          null,
+          "error"
+        );
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchBorrowedBooks();
+    fetchBorrowBooks();
   }, []);
 
   return (
@@ -74,10 +85,12 @@ const Books = () => {
 
       <section>
         <div className="shopping">
-          <p>Livres Empruntés</p>
+          <p>Borrowed Books</p>
         </div>
 
-        {borrowedBooks.length > 0 ? (
+        {isLoading ? (
+          <div className="loading">Loading...</div> // Afficher le message de chargement
+        ) : borrowedBooks.length > 0 ? (
           <section className="cartContent">
             {borrowedBooks.map((book) => (
               <BookCard
@@ -104,7 +117,7 @@ const Books = () => {
 function BorrowedBooks() {
   return (
     <>
-      <TopBody visibility="true" name="Livres Empruntés" />
+      <TopBody visibility="true" name="Borrowed Books" />
       <Books />
     </>
   );

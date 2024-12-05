@@ -23,7 +23,7 @@ const CustomersPage = () => {
         const customers = await getClients();
         setCustomers(customers);
       } catch (error) {
-        console.error("Erreur lors de la récupération des clients", error);
+        //console.error("Error retrieving customers", error);
         setCustomers([]);
       }
     };

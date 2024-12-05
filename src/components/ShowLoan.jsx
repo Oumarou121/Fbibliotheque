@@ -31,7 +31,7 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
       try {
         setCurrentLoan(loan);
       } catch (error) {
-        addAlert("Erreur de chargement des données.", "", "", "error");
+        addAlert("Error loading data.", "", "", "error");
       }
     };
     fetchLoan();
@@ -71,11 +71,11 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
       await deleteEmprunt(loan.id);
       updateLoans({ id: loan.id, ...currentLoan, isNew: false });
       // Ajout d'un message de succès
-      addAlert("Emprunt supprimé avec succès.", "", "", "success");
+      addAlert("Loan successfully deleted.", "", "", "success");
       // Fermer la modale
       onClose();
     } catch (error) {
-      addAlert("Erreur lors de la suppression de l'emprunt.", "", "", "error");
+      addAlert("Error deleting loan.", "", "", "error");
     } finally {
       setLoading(false);
     }
@@ -83,7 +83,7 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
 
   const saveChanges = async () => {
     if (!currentLoan?.clientId || !currentLoan?.livreId) {
-      addAlert("Veuillez remplir tous les champs.", "", "", "error");
+      addAlert("Please fill in all fields.", "", "", "error");
       return;
     }
     setLoading(true);
@@ -113,24 +113,47 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
           setCurrentLoan(loanCurrent);
         }
 
-        addAlert("Emprunt ajoute avec réussie !", "", "", "success");
+        addAlert("Borrowing added successfully!", "", "", "success");
         // Met à jour la liste des loans dans LoansPage
         updateLoans({ ...loanCurrent, isNew: true });
       } else {
-        console.log(currentLoan);
+        //console.log(currentLoan);
         const l = await updateEmprunt(currentLoan);
-        console.log(l);
+        //console.log(l);
 
         // Met à jour la liste des loans dans LoansPage
         updateLoans({ ...loanData, id: currentLoan?.id, isNew: false });
-        addAlert("Mise à jour réussie !", "", "", "success");
+        addAlert("Update successful!", "", "", "success");
       }
 
       setIsEditing(false);
       // onClose();
     } catch (error) {
-      addAlert("Échec de la mise à jour. Réessayez.", "", "", "error");
-      console.log(error);
+      // addAlert("Update failed. Please try again.", "", "", "error");
+      // //console.log(error);
+      const e = error.toString();
+      //console.error("Error while borrowing the book", error);
+      var result = "";
+      if (e.includes("Emprunt déjà existant pour le client ID:")) {
+        result = "You have already borrowed this book";
+      }
+      if (e.includes("Livre non disponible : Quantité insuffisante")) {
+        result = "Book not available: Insufficient quantity";
+      }
+      if (e.includes("Adhérent non trouvé pour le client ID:")) {
+        result = "Please make sure you subscribe to a subscription";
+      }
+      if (
+        e.includes(
+          "Le nombre d'emprunts disponibles pour cet adhérent est épuisé"
+        )
+      ) {
+        result =
+          "The number of loans available for this subscription is exhausted.";
+      } else {
+        result = "Error while borrowing the book.";
+      }
+      addAlert(result, null, null, "warning");
     } finally {
       setLoading(false);
     }
@@ -164,7 +187,7 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
             )}
           </div>
           <div className="profileInfo">
-            <label>Livre Id :</label>
+            <label>Book Id :</label>
             {isEditing ? (
               <input
                 type="number"
@@ -177,7 +200,7 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
             )}
           </div>
           <div className="profileInfo">
-            <label>Date Emprunt :</label>
+            <label>Date Borrowed :</label>
             {isEditing ? (
               <input
                 type="date"
@@ -191,7 +214,7 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
           </div>
 
           <div className="profileInfo">
-            <label>Date Retour Prevue :</label>
+            <label>Expected Return Date :</label>
             {isEditing ? (
               <input
                 type="date"
@@ -206,15 +229,15 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
 
           <div className="profileActions">
             {loading ? (
-              <button disabled>Chargement...</button>
+              <button disabled>Loading...</button>
             ) : isDelete ? (
               <button className="deleteBtn" onClick={() => deleteUser()}>
                 Delete
               </button>
             ) : isEditing ? (
-              <button onClick={saveChanges}>Sauvegarder</button>
+              <button onClick={saveChanges}>To safeguard</button>
             ) : (
-              <button onClick={() => setIsEditing(true)}>Modifier</button>
+              <button onClick={() => setIsEditing(true)}>To modify</button>
             )}
           </div>
         </div>

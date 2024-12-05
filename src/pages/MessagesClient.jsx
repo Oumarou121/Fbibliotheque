@@ -16,12 +16,12 @@ const Messages = () => {
           const messagesByReceiver = await getMessagesByReceiver(data?.email);
           setMessages(messagesByReceiver);
         } catch (error) {
-          setError("Erreur lors de la récupération des messages.");
+          setError("Error retrieving messages.");
         } finally {
           setLoading(false);
         }
       } else {
-        setError("Utilisateur non authentifié.");
+        setError("Unauthenticated user.");
         setLoading(false);
       }
     };
@@ -30,7 +30,7 @@ const Messages = () => {
 
   // Gestion des états : Chargement, Erreur, ou Affichage des messages
   if (loading) {
-    return <p className="loading-message">Chargement des messages...</p>;
+    return <p className="loading-message">Loading messages...</p>;
   }
 
   if (error) {
@@ -39,9 +39,9 @@ const Messages = () => {
 
   return (
     <div className="messages-container">
-      <h1 className="messages-title">Messages Réçus</h1>
+      <h1 className="messages-title">Messages Received</h1>
       {messages.length === 0 ? (
-        <p>Aucun message reçu.</p>
+        <p>No message received.</p>
       ) : (
         <ul className="messages-list">
           {messages.map((msg) => (

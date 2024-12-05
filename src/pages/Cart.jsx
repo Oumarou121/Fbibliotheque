@@ -18,6 +18,7 @@ const CartBody = () => {
   const [alerts, setAlerts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentBook, setCurrentBook] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Ajouter une alerte
   const addAlert = (message, link, linkText, type) => {
@@ -43,27 +44,30 @@ const CartBody = () => {
     try {
       // Logique pour emprunter le livre
       // await onBorrowBook(currentBook.id);
-      await addEmprunt({clientId: userData?.id, livreId: currentBook.livreId});
+      await addEmprunt({
+        clientId: userData?.id,
+        livreId: currentBook.livreId,
+      });
       removeHandler(currentBook.id, false);
       addAlert(
-        "Le livre a été emprunté avec succès.",
+        "The book has been successfully borrowed.",
         "/emprunts",
-        "Voir mes emprunts",
+        "View my loans",
         "success"
       );
     } catch (error) {
       const e = error.toString();
-      console.error("Erreur lors de l'emprunt du livre", error);
+      //console.error("Error while borrowing the book", error);
       var result = "";
       if (e.includes("Emprunt déjà existant pour le client ID:")) {
-        result = "Vous avez déjà emprunt ce livre";
+        result = "You have already borrowed this book";
         removeHandler(currentBook.id, false);
       }
       if (e.includes("Livre non disponible : Quantité insuffisante")) {
-        result = "Livre non disponible : Quantité insuffisante";
+        result = "Book not available: Insufficient quantity";
       }
       if (e.includes("Adhérent non trouvé pour le client ID:")) {
-        result = "Veillez vous souscrire a un abonnement";
+        result = "Please make sure you subscribe to a subscription";
       }
       if (
         e.includes(
@@ -71,7 +75,7 @@ const CartBody = () => {
         )
       ) {
         result =
-          "Le nombre d'emprunts disponibles pour cet abonnement est épuisé";
+          "The number of loans available for this subscription is exhausted";
       }
       addAlert(result, null, null, "warning");
     } finally {
@@ -92,26 +96,49 @@ const CartBody = () => {
       );
 
       if (isShow) {
-        addAlert("Le livre a été supprimé du panier.", null, null, "info");
+        addAlert(
+          "The book has been removed from the cart.",
+          null,
+          null,
+          "info"
+        );
       }
     } catch (error) {
-      console.error("Erreur lors de la suppression du livre : ", error);
+      //console.error("Error deleting book : ", error);
     }
   };
 
   useEffect(() => {
     const fetchCartItems = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        throw new Error("Utilisateur non authentifié.");
-      }
+      setIsLoading(true);
       try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          addAlert(
+            "Please log in to view your cart.",
+            "/login",
+            "Login",
+            "warning"
+          );
+          setIsLoading(false);
+          return;
+        }
+
         const user = await getClientData();
         const books = await GetCartByClient(user?.id);
-        setCartItems(books);
+
         setUserData(user);
+        setCartItems(books);
       } catch (error) {
-        console.log("Error getting cart", error);
+        //console.error("Error getting cart", error);
+        addAlert(
+          "Failed to fetch cart items. Please try again later.",
+          null,
+          null,
+          "error"
+        );
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -145,7 +172,9 @@ const CartBody = () => {
           <p>Shopping Basket</p>
         </div>
 
-        {cartItems.length > 0 ? (
+        {isLoading ? (
+          <div className="loading">Loading...</div> // Afficher le message de chargement
+        ) : cartItems.length > 0 ? (
           <section className="cartContent">
             {cartItems.map((book) => (
               <BookCard

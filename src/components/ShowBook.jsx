@@ -15,6 +15,14 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   const [imageBinary, setImageBinary] = useState(null);
 
+  const handleIsEditing = () => {
+    setIsEditing(true);
+    setImagePreview(
+      `https://bbibliotheque-production.up.railway.app/api/livres/${currentBook?.id}/image`
+    );
+    setIsPreviewVisible(true);
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -23,7 +31,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
         setImagePreview(reader.result);
         const imBin = reader.result.split(",")[1];
         setImageBinary(imBin);
-        console.log(imBin);
+        //console.log(imBin);
         setIsPreviewVisible(true);
       };
       reader.readAsDataURL(file);
@@ -57,7 +65,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
       try {
         setBook(currentBook);
       } catch (error) {
-        addAlert("Erreur de chargement des données adhérent.", "", "", "error");
+        addAlert("Error loading member data.", "", "", "error");
       }
     };
     fetchBookData();
@@ -92,27 +100,28 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
   };
 
   const saveChanges = async () => {
+    //console.log(book);
     if (!currentBook) {
       if (
         !book?.titre ||
         !book?.auteur ||
-        !book?.anneePublication >= 0 ||
-        !book?.quantite >= 0 ||
-        !book?.nbrEmprunt >= 0 ||
+        book?.anneePublication < 0 ||
+        book?.quantite < 0 ||
+        book?.nbrEmprunt < 0 ||
         !imageBinary
       ) {
-        addAlert("Veuillez remplir tous les champs.", "", "", "error");
+        addAlert("Please fill in all fields.", "", "", "error");
         return;
       }
     } else {
       if (
         !book?.titre ||
         !book?.auteur ||
-        !book?.anneePublication >= 0 ||
-        !book?.quantite >= 0 ||
-        !book?.nbrEmprunt >= 0
+        book?.anneePublication < 0 ||
+        book?.quantite < 0 ||
+        book?.nbrEmprunt < 0
       ) {
-        addAlert("Veuillez remplir tous les champs.", "", "", "error");
+        addAlert("Please fill in all fields.", "", "", "error");
         return;
       }
     }
@@ -129,7 +138,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
         description: null,
       };
 
-      console.log(BookData);
+      //console.log(BookData);
 
       if (!currentBook) {
         //Create
@@ -140,7 +149,8 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
           id: bookD?.id,
           isNew: true,
         });
-        addAlert("Livre ajoute avec réussie !", "", "", "success");
+        setIsEditing(false);
+        addAlert("Book added successfully!", "", "", "success");
       } else {
         //Update
         await updateLivre(book?.id, BookData);
@@ -150,11 +160,12 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
           id: book?.id,
           isNew: false,
         });
-        addAlert("Mise à jour réussie !", "", "", "success");
+        setIsEditing(false);
+        addAlert("Update successful!", "", "", "success");
       }
     } catch (error) {
-      addAlert("Échec de la mise à jour. Réessayez.", "", "", "error");
-      console.error(error);
+      addAlert("Update failed. Please try again.", "", "", "error");
+      //console.error(error);
     } finally {
       setLoading(false);
     }
@@ -167,11 +178,11 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
       await deleteLivre(book.id);
       updateBooks({ ...book, isNew: false });
       // Ajout d'un message de succès
-      addAlert("Livre supprimé avec succès.", "", "", "success");
+      addAlert("Book deleted successfully.", "", "", "success");
       // Fermer la modale
       onClose();
     } catch (error) {
-      addAlert("Erreur lors de la suppression du livre.", "", "", "error");
+      addAlert("Error deleting book.", "", "", "error");
     } finally {
       setLoading(false);
     }
@@ -224,7 +235,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
         )}
         <div className="profileCard">
           <div className="profileInfo">
-            <label>Auteur :</label>
+            <label>Author :</label>
             {isEditing ? (
               <input
                 type="text"
@@ -238,7 +249,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
           </div>
 
           <div className="profileInfo">
-            <label>Titre :</label>
+            <label>Title :</label>
             {isEditing ? (
               <input
                 type="text"
@@ -252,7 +263,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
           </div>
 
           <div className="profileInfo">
-            <label>Année de publication :</label>
+            <label>Year of publication :</label>
             {isEditing ? (
               <input
                 type="number"
@@ -266,7 +277,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
           </div>
 
           <div className="profileInfo">
-            <label>Nombre d'emprunts :</label>
+            <label>Number of loans :</label>
             {isEditing ? (
               <input
                 type="number"
@@ -295,15 +306,15 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
 
           <div className="profileActions">
             {loading ? (
-              <button disabled>Chargement...</button>
+              <button disabled>Loading...</button>
             ) : isDelete ? (
               <button className="deleteBtn" onClick={() => deleteBook()}>
                 Delete
               </button>
             ) : isEditing ? (
-              <button onClick={() => saveChanges()}>Sauvegarder</button>
+              <button onClick={() => saveChanges()}>To safeguard</button>
             ) : (
-              <button onClick={() => setIsEditing(true)}>Modifier</button>
+              <button onClick={() => handleIsEditing()}>To modify</button>
             )}
           </div>
         </div>

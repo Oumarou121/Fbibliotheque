@@ -82,3 +82,32 @@
   font-size: 1.2rem;
   color: #777;
 }
+
+/* Styles pour le message de chargement */
+.loading {
+  font-size: 1.5rem;
+  color: #007bff;
+  text-align: center;
+  margin: 2rem 0;
+  animation: fade-in 1s ease-in-out infinite;
+}
+
+/* Styles pour le message "No books found" */
+.no-books {
+  font-size: 1.25rem;
+  color: #dc3545;
+  text-align: center;
+  margin: 2rem 0;
+  font-style: italic;
+}
+
+/* Animation pour le chargement */
+@keyframes fade-in {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}

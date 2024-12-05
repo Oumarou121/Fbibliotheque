@@ -257,7 +257,7 @@ function FLogin({
 
   // Handler pour le formulaire de connexion
   const handleLogin = async (e) => {
-    console.log("Hello");
+    //console.log("Hello");
     e.preventDefault();
 
     setEmailError(""); // Réinitialisation des erreurs
@@ -290,7 +290,7 @@ function FLogin({
         try {
           const token = await loginClient(loginData);
           localStorage.setItem("authToken", token);
-          console.log("Connexion réussie, token:", token);
+          //console.log("Connexion réussie, token:", token);
           const data = await getClientData();
           if (data.role === "admin") {
             navigate("/admin");
@@ -479,7 +479,7 @@ function FForgotPassword({ loginHandler }) {
       emailInput.classList.add("error");
     } else {
       // Traitez ici la logique de réinitialisation du mot de passe
-      console.log("Email:", emailInput.value);
+      //console.log("Email:", emailInput.value);
     }
   };
 
@@ -739,10 +739,10 @@ function FRegister({
           email: email,
           password: password,
         };
-        console.log(clientData);
+        //console.log(clientData);
         try {
           const registeredClient = await registerClient(clientData);
-          console.log("Client enregistré:", registeredClient);
+          //console.log("Client enregistré:", registeredClient);
           const data = await getClientData();
           if (data.role === "admin") {
             navigate("/admin");

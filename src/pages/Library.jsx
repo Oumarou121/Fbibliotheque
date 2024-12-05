@@ -8,6 +8,7 @@ function Library() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [books, setBooks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const livres = async () => {
@@ -16,7 +17,9 @@ function Library() {
         setBooks(books);
         setFilteredBooks(books);
       } catch (error) {
-        console.error(`Erreur lors de la récupération des livre : ${error}`);
+        //console.error(`Erreur lors de la récupération des livre : ${error}`);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -24,11 +27,11 @@ function Library() {
   }, []);
 
   const handleAddToCart = (bookId) => {
-    console.log(`Book ${bookId} added to cart`);
+    //console.log(`Book ${bookId} added to cart`);
   };
 
   const handleAddToFavorites = (bookId) => {
-    console.log(`Book ${bookId} added to favorites`);
+    //console.log(`Book ${bookId} added to favorites`);
   };
 
   // Filtrer les livres en fonction du texte saisi
@@ -56,7 +59,9 @@ function Library() {
           />
         </section>
       </div>
-      {books.length > 0 ? (
+      {isLoading ? (
+        <div className="loading">Loading...</div> // Afficher le message de chargement
+      ) : books.length > 0 ? (
         <BookList
           name={"Our Book Collection"}
           books={filteredBooks}
@@ -64,7 +69,7 @@ function Library() {
           onAddToFavorites={handleAddToFavorites}
         />
       ) : (
-        <p>Aucun livre trouvé...</p>
+        <p>No books found...</p>
       )}
     </>
   );

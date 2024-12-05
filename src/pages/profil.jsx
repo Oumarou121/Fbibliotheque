@@ -30,11 +30,11 @@ const UserProfile = () => {
         const adherentValue = await getAdherentByClient(user.id);
         const lastAdherent = adherentValue[adherentValue.length - 1];
         setAdherent(lastAdherent);
-        const typeMapping = ["Basique", "Standard", "Premium"];
-        setTypeAdherent(typeMapping[lastAdherent?.type] || "Pas d'abonnement");
+        const typeMapping = ["Basic", "Standard", "Premium"];
+        setTypeAdherent(typeMapping[lastAdherent?.type] || "No subscription");
       } catch (error) {
         addAlert(
-          "Erreur de chargement des données utilisateur.",
+          "Error loading user data.",
           "",
           "",
           "error"
@@ -76,7 +76,7 @@ const UserProfile = () => {
 
   const saveChanges = async () => {
     if (!userData.nom || !userData.adresse || !userData.telephone) {
-      addAlert("Tous les champs doivent être remplis.", "", "", "warning");
+      addAlert("All fields must be completed.", "", "", "warning");
       return;
     }
     setLoading(true);
@@ -87,10 +87,10 @@ const UserProfile = () => {
         telephone: userData.telephone,
       };
       await updateClient(userData?.id, clientData);
-      addAlert("Mise à jour réussie !", "", "", "success");
+      addAlert("Update successful!", "", "", "success");
       setIsEditing(false);
     } catch (error) {
-      addAlert("Échec de la mise à jour. Réessayez.", "", "", "error");
+      addAlert("Update failed. Please try again.", "", "", "error");
     } finally {
       setLoading(false);
     }
@@ -111,7 +111,7 @@ const UserProfile = () => {
       <h2>Mon Profil</h2>
       <div className="profileCard">
         <div className="profileInfo">
-          <label>Nom :</label>
+          <label>Name :</label>
           {isEditing ? (
             <input
               type="text"
@@ -128,7 +128,7 @@ const UserProfile = () => {
           <p>{userData?.email}</p>
         </div>
         <div className="profileInfo">
-          <label>Téléphone :</label>
+          <label>Phone :</label>
           {isEditing ? (
             <div style={{ display: "flex", alignItems: "center" }}>
               <span style={{ marginRight: "5px" }}>+216</span>
@@ -146,7 +146,7 @@ const UserProfile = () => {
         </div>
 
         <div className="profileInfo">
-          <label>Adresse :</label>
+          <label>address :</label>
           {isEditing ? (
             <input
               type="text"
@@ -159,20 +159,20 @@ const UserProfile = () => {
           )}
         </div>
         <div className="profileInfo">
-          <label>Type d'abonnement :</label>
+          <label>Subscription type :</label>
           <p>{typeAdherent}</p>
         </div>
         <div className="profileInfo">
-          <label>Emprunts restants :</label>
+          <label>Remaining loans :</label>
           <p>{adherent?.nbrEmprunt}</p>
         </div>
         <div className="profileActions">
           {loading ? (
-            <button disabled>Chargement...</button>
+            <button disabled>Loading...</button>
           ) : isEditing ? (
-            <button onClick={saveChanges}>Sauvegarder</button>
+            <button onClick={saveChanges}>To safeguard</button>
           ) : (
-            <button onClick={() => setIsEditing(true)}>Modifier</button>
+            <button onClick={() => setIsEditing(true)}>To modify</button>
           )}
         </div>
       </div>

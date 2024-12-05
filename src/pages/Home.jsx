@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [books, setBooks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const navigation = () => {
@@ -18,7 +19,9 @@ function Home() {
         const books = await getLivres();
         setBooks(books);
       } catch (error) {
-        console.error(`Erreur lors de la récupération des livre : ${error}`);
+        //console.error(`Error retrieving books: ${error}`);
+      } finally {
+        setIsLoading(false);
       }
     };
     livres();
@@ -37,40 +40,48 @@ function Home() {
     <div className="home">
       {/* Section de bienvenue */}
       <section className="welcome">
-        <h1>Bienvenue à la Bibliothèque</h1>
-        <p>
-          Explorez nos livres et découvrez de nouvelles lectures passionnantes !
-        </p>
+        <h1>Welcome to the Library</h1>
+        <p>Explore our books and discover exciting new reads!</p>
       </section>
 
       {/* Section Carrousel ou bannière d'images */}
       <section className="carousel">
-        <h2>Nos Nouveaux Livres</h2>
-        <div className="carousel-images">
-          <BookImage bookId={lastThreeIds[0]} />
-          <BookImage bookId={lastThreeIds[1]} />
-          <BookImage bookId={lastThreeIds[2]} />
-        </div>
+        <h2>Our New Books</h2>
+        {isLoading ? (
+          <div className="loading">Loading...</div> // Afficher le message de chargement
+        ) : lastThreeIds.length > 0 ? (
+          <div className="carousel-images">
+            <BookImage bookId={lastThreeIds[0]} />
+            <BookImage bookId={lastThreeIds[1]} />
+            <BookImage bookId={lastThreeIds[2]} />
+          </div>
+        ) : (
+          <p className="no-books">No books found</p>
+        )}
       </section>
 
-      {mostPopulary.length > 0 ? (
-        <BookList name={"Nos Livres Populaires"} books={mostPopulary} />
+      {isLoading ? (
+        <div className="loading">Loading...</div> // Afficher le message de chargement
+      ) : mostPopulary.length > 0 ? (
+        <BookList name={"Our Popular Books"} books={mostPopulary} />
       ) : (
-        <p>Aucun livre trouvé...</p>
+        <p className="no-books">No books found</p>
       )}
 
       {/* Section Informations supplémentaires */}
       <section className="info">
-        <h2>Pourquoi Choisir Notre Bibliothèque ?</h2>
+        <h2>Why Choose Our Library?</h2>
         <p>
-          Une vaste collection de livres, un accès facile, et une expérience de
-          lecture inoubliable.
+          A vast collection of books, easy access, and an unforgettable reading
+          experience.
         </p>
       </section>
 
       {/* Bouton "Voir plus" */}
       <section className="load-more">
-        <button className="load-more-btn" onClick={navigation}>Voir plus</button>
+        <button className="load-more-btn" onClick={navigation}>
+          See more
+        </button>
       </section>
     </div>
   );

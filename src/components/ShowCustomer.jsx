@@ -42,19 +42,19 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
       try {
         setUserData(client);
         const adherentValue = await getAdherentByClient(client.id);
-        console.log(adherentValue);
+        //console.log(adherentValue);
         if (adherentValue && adherentValue.length > 0) {
           const lastAdherent = adherentValue[adherentValue.length - 1];
           setAdherent(lastAdherent);
           setTypeAdherent(
-            ["Basique", "Standard", "Premium"][lastAdherent.type - 1] ||
-              "Pas d'abonnement"
+            ["Basic", "Standard", "Premium"][lastAdherent.type - 1] ||
+              "No subscription"
           );
         } else {
-          setTypeAdherent("Pas d'abonnement");
+          setTypeAdherent("No subscription");
         }
       } catch (error) {
-        addAlert("Erreur de chargement des données adhérent.", "", "", "error");
+        addAlert("Error loading member data.", "", "", "error");
       }
     };
     fetchUserData();
@@ -119,12 +119,12 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
       updateCustomers({ id: client.id, ...userData, isNew: false });
 
       // Ajout d'un message de succès
-      addAlert("Client supprimé avec succès.", "", "", "success");
+      addAlert("Client deleted successfully.", "", "", "success");
 
       // Fermer la modale
       onClose();
     } catch (error) {
-      addAlert("Erreur lors de la suppression du client.", "", "", "error");
+      addAlert("Error deleting client.", "", "", "error");
     } finally {
       setLoading(false);
     }
@@ -190,7 +190,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
             }
           }
 
-          addAlert("Client ajoute avec réussie !", "", "", "success");
+          addAlert("Client added successfully!", "", "", "success");
 
           // Met à jour la liste des clients dans CustomersPage
           updateCustomers({ ...clientData1, id: clientId, isNew: true });
@@ -201,7 +201,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
         if (adherent?.id) {
           await updateAdherent(adherentData);
         } else if (
-          typeAdherent === "Pas d'abonnement" &&
+          typeAdherent === "No subscription" &&
           adherent?.type !== undefined
         ) {
           await addAdherent({
@@ -213,18 +213,18 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
 
         // Met à jour la liste des clients dans CustomersPage
         updateCustomers({ ...clientData, id: userData?.id, isNew: false });
-        addAlert("Mise à jour réussie !", "", "", "success");
+        addAlert("Update successful!", "", "", "success");
       }
 
       setTypeAdherent(
-        ["Basique", "Standard", "Premium"][adherent?.type - 1] ||
-          "Pas d'abonnement"
+        ["Basic", "Standard", "Premium"][adherent?.type - 1] ||
+          "No subscription"
       );
       setIsEditing(false);
       // onClose();
     } catch (error) {
-      addAlert("Échec de la mise à jour. Réessayez.", "", "", "error");
-      console.log(error);
+      addAlert("Update failed. Please try again.", "", "", "error");
+      //console.log(error);
     } finally {
       setLoading(false);
     }
@@ -246,7 +246,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
         {/* <h2>x</h2> */}
         <div className="profileCard">
           <div className="profileInfo">
-            <label>Nom :</label>
+            <label>Name :</label>
             {isEditing ? (
               <input
                 type="text"
@@ -287,7 +287,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
             </div>
           )}
           <div className="profileInfo">
-            <label>Téléphone :</label>
+            <label>Phone :</label>
             {isEditing ? (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span style={{ marginRight: "5px" }}>+216</span>
@@ -305,7 +305,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
           </div>
 
           <div className="profileInfo">
-            <label>Adresse :</label>
+            <label>Address :</label>
             {isEditing ? (
               <input
                 type="text"
@@ -332,7 +332,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
           </div>
           {/* {client && ( */}
           <div className="profileInfo">
-            <label>Type d'abonnement :</label>
+            <label>Subscription type :</label>
             {isEditing ? (
               <input
                 type="number"
@@ -347,7 +347,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
           {/* )} */}
           {/* {client && ( */}
           <div className="profileInfo">
-            <label>Emprunts restants :</label>
+            <label>Remaining loans :</label>
             {isEditing ? (
               <input
                 type="number"
@@ -363,15 +363,15 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
 
           <div className="profileActions">
             {loading ? (
-              <button disabled>Chargement...</button>
+              <button disabled>Loading...</button>
             ) : isDelete ? (
               <button className="deleteBtn" onClick={() => deleteUser()}>
                 Delete
               </button>
             ) : isEditing ? (
-              <button onClick={saveChanges}>Sauvegarder</button>
+              <button onClick={saveChanges}>To safeguard</button>
             ) : (
-              <button onClick={() => setIsEditing(true)}>Modifier</button>
+              <button onClick={() => setIsEditing(true)}>To modify</button>
             )}
           </div>
         </div>

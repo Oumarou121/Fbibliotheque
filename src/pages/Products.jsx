@@ -24,7 +24,7 @@ const ProductsPage = () => {
         setBooks(books);
         setFilteredBooks(books);
       } catch (error) {
-        console.error("Erreur lors de la récupération des livres", error);
+        //console.error("Error retrieving books", error);
         setBooks([]);
       }
     };
@@ -37,8 +37,7 @@ const ProductsPage = () => {
       (book) =>
         (book.titre &&
           book.titre.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (book.id &&
-          book.id === searchTerm)
+        (book.id && book.id === searchTerm)
     );
     setFilteredBooks(results);
   }, [searchTerm, books]);
@@ -92,8 +91,8 @@ const ProductsPage = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Titre</th>
-              <th title="Nombre d'emprunt">Nbr</th>
+              <th>title</th>
+              <th title="Number of loans">Nbr</th>
               <th>Stock</th>
               <th>Actions</th>
             </tr>

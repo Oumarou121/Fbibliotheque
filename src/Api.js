@@ -85,7 +85,7 @@ export const logoutClient = async () => {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
-    console.error("Aucun token trouvé. L'utilisateur est déjà déconnecté.");
+    //console.error("Aucun token trouvé. L'utilisateur est déjà déconnecté.");
     return;
   }
 
@@ -100,21 +100,21 @@ export const logoutClient = async () => {
 
     if (response.ok) {
       localStorage.removeItem("authToken");
-      console.log("Déconnexion réussie.");
+      //console.log("Déconnexion réussie.");
       window.location.reload();
     } else {
       const error = await response.text();
-      console.error("Erreur de déconnexion:", error);
+      //console.error("Erreur de déconnexion:", error);
     }
   } catch (error) {
-    console.error("Erreur de déconnexion:", error);
+    //console.error("Erreur de déconnexion:", error);
   }
 };
 
 export const getClientData = async () => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    console.error("Aucun token trouvé.");
+    //console.error("Aucun token trouvé.");
     return;
   }
 
@@ -137,13 +137,13 @@ export const getClientData = async () => {
   } catch (error) {
     const e = error.toString();
     if (e.includes(IVALID_TOKEN)) {
-      console.log("Token Invalide");
+      //console.log("Token Invalide");
       localStorage.removeItem("authToken");
     }
-    console.error(
-      "Erreur lors de la récupération des données du client:",
-      error
-    );
+    // console.error(
+    //   "Erreur lors de la récupération des données du client:",
+    //   error
+    // );
   }
 };
 
@@ -157,19 +157,19 @@ export const isInCart = async (cartData) => {
 
     if (itemInCart) {
       await RemoveFromCart(itemInCart.id);
-      console.log(
-        `Le livre (ID: ${cartData.livreId}) a été supprimé du panier.`
-      );
+      //console.log(
+      //  `Le livre (ID: ${cartData.livreId}) a été supprimé du panier.`
+      //);
       await getTotalQuantityInCart(cartData.clientId);
       return "removed";
     } else {
       await AddToCart(cartData);
-      console.log(`Le livre (ID: ${cartData.livreId}) a été ajouté au panier.`);
+      //console.log(`Le livre (ID: ${cartData.livreId}) a été ajouté au panier.`);
       await getTotalQuantityInCart(cartData.clientId);
       return "added";
     }
   } catch (error) {
-    console.error(`Erreur dans isInCart : ${error.message}`);
+    //console.error(`Erreur dans isInCart : ${error.message}`);
   }
 };
 
@@ -177,9 +177,9 @@ export const GetCartByClient = async (clientId) => {
   // const { showLoader, hideLoader } = useLoader();
   // showLoader();
   const token = localStorage.getItem("authToken");
-  console.log(token);
+  //console.log(token);
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -211,7 +211,7 @@ export const AddToCart = async (cartData) => {
   // showLoader();
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -242,7 +242,7 @@ export const RemoveFromCart = async (cartId) => {
   // showLoader();
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -259,7 +259,7 @@ export const RemoveFromCart = async (cartId) => {
       throw new Error(error);
     }
 
-    console.log("Article supprimé du panier avec succès.");
+    //console.log("Article supprimé du panier avec succès.");
   } catch (error) {
     throw new Error(
       `Erreur lors de la suppression du panier: ${error.message}`
@@ -279,21 +279,21 @@ export const isInFavorite = async (favoriteData) => {
 
     if (itemInFavorite) {
       await RemoveFromFavorite(itemInFavorite.id);
-      console.log(
-        `Le livre (ID: ${favoriteData.livreId}) a été retiré des favoris.`
-      );
+      //console.log(
+      //  `Le livre (ID: ${favoriteData.livreId}) a été retiré des favoris.`
+      //);
       // await getTotalQuantityInCart(favoriteData.clientId);
       return "removed";
     } else {
       await AddToFavorite(favoriteData);
-      console.log(
-        `Le livre (ID: ${favoriteData.livreId}) a été ajouté aux favoris.`
-      );
+      //console.log(
+      //  `Le livre (ID: ${favoriteData.livreId}) a été ajouté aux favoris.`
+      //);
       // await getTotalQuantityInCart(favoriteData.clientId);
       return "added";
     }
   } catch (error) {
-    console.error(`Erreur dans isInFavorite : ${error.message}`);
+    //console.error(`Erreur dans isInFavorite : ${error.message}`);
   }
 };
 
@@ -302,7 +302,7 @@ export const GetFavoritesByClient = async (clientId) => {
   // showLoader();
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -334,7 +334,7 @@ export const AddToFavorite = async (favoriteData) => {
   // showLoader();
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -365,7 +365,7 @@ export const RemoveFromFavorite = async (favoriteId) => {
   // showLoader();
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -382,7 +382,7 @@ export const RemoveFromFavorite = async (favoriteId) => {
       throw new Error(error);
     }
 
-    console.log("Livre supprimé des favoris avec succès.");
+    //console.log("Livre supprimé des favoris avec succès.");
   } catch (error) {
     throw new Error(
       `Erreur lors de la suppression des favoris: ${error.message}`
@@ -421,7 +421,7 @@ export const getTotalMessageInCart = async () => {
 export const getAdherentByClient = async (clientId) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -448,7 +448,7 @@ export const getAdherentByClient = async (clientId) => {
 export const addAdherent = async (Data) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -465,7 +465,7 @@ export const addAdherent = async (Data) => {
       const error = await response.text();
       throw new Error(error);
     }
-    // console.log(response.json());
+    // //console.log(response.json());
     // return await response.json();
   } catch (error) {
     throw new Error(`Erreur lors de l'ajout de l'adherent: ${error.message}`);
@@ -475,7 +475,7 @@ export const addAdherent = async (Data) => {
 export const updateAdherent = async (Data) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -502,7 +502,7 @@ export const updateAdherent = async (Data) => {
 export const deleteAdherentByClient = async (clientId) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -519,7 +519,7 @@ export const deleteAdherentByClient = async (clientId) => {
       throw new Error(error);
     }
 
-    console.log("Adherent supprimé avec succès.");
+    //console.log("Adherent supprimé avec succès.");
   } catch (error) {
     throw new Error(
       `Erreur lors de la suppression de l'adherent: ${error.message}`
@@ -530,7 +530,7 @@ export const deleteAdherentByClient = async (clientId) => {
 export const addEmprunt = async (Data) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -557,7 +557,7 @@ export const addEmprunt = async (Data) => {
 // export const updateEmprunt = async (empruntId, Data) => {
 //   const token = localStorage.getItem("authToken");
 //   if (!token) {
-//     throw new Error("Utilisateur non authentifié.");
+//     throw new Error("Unauthenticated user.");
 //   }
 
 //   try {
@@ -586,7 +586,7 @@ export const addEmprunt = async (Data) => {
 export const updateEmprunt = async (Data) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -615,7 +615,7 @@ export const updateEmprunt = async (Data) => {
 export const getEmprunt = async (clientId) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -643,7 +643,7 @@ export const getEmprunt = async (clientId) => {
 export const getAllEmprunt = async () => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -671,7 +671,7 @@ export const getAllEmprunt = async () => {
 export const deleteEmprunt = async (empruntId) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -688,7 +688,7 @@ export const deleteEmprunt = async (empruntId) => {
       throw new Error(error);
     }
 
-    console.log("Emprunt supprimer");
+    //console.log("Emprunt supprimer");
   } catch (error) {
     throw new Error(
       `Erreur lors de la recuperation des emprunts : ${error.message}`
@@ -699,7 +699,7 @@ export const deleteEmprunt = async (empruntId) => {
 export const getLivreById = async (livreId) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -738,7 +738,7 @@ export const getLivres = async () => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur dans getLivres:", error);
+    //console.error("Erreur dans getLivres:", error);
     throw new Error(
       `Erreur lors de la récupération des livres : ${error.message}`
     );
@@ -748,7 +748,7 @@ export const getLivres = async () => {
 export const updateClient = async (clientId, clientData) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -769,7 +769,7 @@ export const updateClient = async (clientId, clientData) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur dans updateClient:", error);
+    //console.error("Erreur dans updateClient:", error);
     throw new Error(`Erreur lors de la mise à jour : ${error.message}`);
   }
 };
@@ -777,7 +777,7 @@ export const updateClient = async (clientId, clientData) => {
 export const getClients = async () => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -794,7 +794,7 @@ export const getClients = async () => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur dans getClients:", error);
+    //console.error("Erreur dans getClients:", error);
     throw new Error(
       `Erreur lors de la recuperation des livres : ${error.message}`
     );
@@ -804,7 +804,7 @@ export const getClients = async () => {
 export const createLivre = async (Data) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -827,7 +827,7 @@ export const createLivre = async (Data) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur dans createLivre:", error);
+    //console.error("Erreur dans createLivre:", error);
     throw new Error(`Erreur lors de la création du livre : ${error.message}`);
   }
 };
@@ -835,7 +835,7 @@ export const createLivre = async (Data) => {
 export const updateLivre = async (livreId, Data) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -856,7 +856,7 @@ export const updateLivre = async (livreId, Data) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur dans updateLivre:", error);
+    //console.error("Erreur dans updateLivre:", error);
     throw new Error(
       `Erreur lors de la mise à jour du livre : ${error.message}`
     );
@@ -866,7 +866,7 @@ export const updateLivre = async (livreId, Data) => {
 export const deleteLivre = async (livreId) => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    throw new Error("Utilisateur non authentifié.");
+    throw new Error("Unauthenticated user.");
   }
 
   try {
@@ -883,7 +883,7 @@ export const deleteLivre = async (livreId) => {
       );
     }
   } catch (error) {
-    console.error("Erreur dans updateLivre:", error);
+    //console.error("Erreur dans updateLivre:", error);
     throw new Error(
       `Erreur lors de la suppression du livre : ${error.message}`
     );

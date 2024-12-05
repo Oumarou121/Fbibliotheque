@@ -31,22 +31,22 @@ export const BookList = ({ name, books, onBorrowBook }) => {
       const result = await isInFavorite({ livreId, clientId });
       if (result === "added") {
         addAlert(
-          "Le livre a été ajouté aux favoris.",
-          "/favoris.html",
-          "Voir votre liste.",
+          "The book has been added to favorites.",
+          "/favorites",
+          "View your list.",
           "info"
         );
       } else if (result === "removed") {
         addAlert(
-          "Le livre a été retiré des favoris.",
-          "/favoris.html",
-          "Voir votre liste.",
+          "The book has been removed from favorites.",
+          "/favorites",
+          "View your list.",
           "info"
         );
       }
     } catch (error) {
-      console.error("Erreur lors de la gestion des favoris :", error);
-      addAlert("Une erreur est survenue.", null, null);
+      //console.error("Error while managing favorites:", error);
+      addAlert("An error has occurred.", null, null);
     }
   };
 
@@ -56,22 +56,22 @@ export const BookList = ({ name, books, onBorrowBook }) => {
       const result = await isInCart({ clientId, livreId, quantity });
       if (result === "added") {
         addAlert(
-          "Le livre a été ajouté au panier.",
+          "The book has been added to the cart.",
           "/cart",
-          "Voir votre panier.",
+          "View your cart.",
           "info"
         );
       } else if (result === "removed") {
         addAlert(
-          "Le livre a été retiré du panier.",
+          "The book has been removed from the cart.",
           "/cart",
-          "Voir votre panier.",
+          "View your cart.",
           "info"
         );
       }
     } catch (error) {
-      console.error("Erreur lors de la gestion du panier :", error);
-      addAlert("Une erreur est survenue.", null, null);
+      //console.error("Error while managing the cart:", error);
+      addAlert("An error has occurred.", null, null);
     }
   };
 
@@ -88,24 +88,24 @@ export const BookList = ({ name, books, onBorrowBook }) => {
       // await onBorrowBook(currentBook.id);
       await addEmprunt({ clientId: userData?.id, livreId: currentBook.id });
       addAlert(
-        "Le livre a été emprunté avec succès.",
+        "The book has been successfully borrowed.",
         "/emprunts",
-        "Voir mes emprunts",
+        "View my loans",
         "success"
       );
       setIsModalOpen(false); // Fermer la modale après l'emprunt
     } catch (error) {
       const e = error.toString();
-      console.error("Erreur lors de l'emprunt du livre", error);
+      //console.error("Error while borrowing the book", error);
       var result = "";
       if (e.includes("Emprunt déjà existant pour le client ID:")) {
-        result = "Vous avez déjà emprunt ce livre";
+        result = "You have already borrowed this book";
       }
       if (e.includes("Livre non disponible : Quantité insuffisante")) {
-        result = "Livre non disponible : Quantité insuffisante";
+        result = "Book not available: Insufficient quantity";
       }
       if (e.includes("Adhérent non trouvé pour le client ID:")) {
-        result = "Veillez vous souscrire a un abonnement";
+        result = "Please make sure you subscribe to a subscription";
       }
       if (
         e.includes(
@@ -113,7 +113,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
         )
       ) {
         result =
-          "Le nombre d'emprunts disponibles pour cet abonnement est épuisé";
+          "The number of loans available for this subscription is exhausted.";
       }
       addAlert(result, null, null, "warning");
     }
@@ -128,10 +128,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
           const user = await getClientData(); // Récupérer les données de l'utilisateur
           setUserData(user); // Mettre à jour les données utilisateur
         } catch (error) {
-          console.error(
-            "Erreur lors de la récupération des données utilisateur",
-            error
-          );
+          //console.error("Error retrieving user data", error);
         }
       }
     };
@@ -184,7 +181,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
                         })
                       }
                     >
-                      <BiHeart size={20} /> Favori
+                      <BiHeart size={20} /> Favorite
                     </button>
                     <button
                       className="action-btn cart-btn"
@@ -196,14 +193,14 @@ export const BookList = ({ name, books, onBorrowBook }) => {
                         })
                       }
                     >
-                      <FaBook size={20} /> Ajouter
+                      <FaBook size={20} /> Add
                     </button>
                   </div>
                   <button
                     className="action-btn borrow-btn"
                     onClick={() => handleBorrowClick(book)} // Ouvrir la modale d'emprunt
                   >
-                    <FaHandHolding size={20} /> Emprunter
+                    <FaHandHolding size={20} /> Borrow
                   </button>
                 </div>
               </div>
@@ -232,7 +229,7 @@ export const BookImage = ({ bookId = 1, type = "normal" }) => {
           if (isMounted) setImageUrl(imageObjectUrl);
         }
       } catch (error) {
-        console.error("Error fetching image:", error);
+        //console.error("Error fetching image:", error);
       }
     };
 

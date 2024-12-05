@@ -146,7 +146,7 @@
 .borrow-btn {
   background-color: #4caf50;
   color: white;
-  width: 70%; /* Centrer le bouton Emprunter */
+  width: 50%; /* Centrer le bouton Emprunter */
 }
 
 .borrow-btn:hover {
