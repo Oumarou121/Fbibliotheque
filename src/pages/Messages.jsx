@@ -18,13 +18,13 @@ const MessagesPage = () => {
     setIsDelete(isDel);
   };
 
-  const truncateMessage = (message, wordLimit = 2) => {
-    const words = message.split(" ");
-    if (words.length > wordLimit) {
-      return words.slice(0, wordLimit).join(" ") + " ...";
-    }
-    return message;
-  };
+  // const truncateMessage = (message, wordLimit = 2) => {
+  //   const words = message.split(" ");
+  //   if (words.length > wordLimit) {
+  //     return words.slice(0, wordLimit).join(" ") + " ...";
+  //   }
+  //   return message;
+  // };
 
   const truncateByLetters = (message, charLimit = 20) => {
     if (message.length > charLimit) {

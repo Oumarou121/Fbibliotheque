@@ -119,7 +119,7 @@ function AbonnementContent() {
     };
 
     fetchUserData();
-  }, []);
+  }, [adherent]);
 
   return (
     <div className="abonnement-container">

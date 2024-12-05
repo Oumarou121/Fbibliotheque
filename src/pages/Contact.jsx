@@ -37,13 +37,13 @@ function ContactBody() {
   };
 
   const handleInputChangeEmail = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
     setEmail(value);
   };
 
   const handleInputChangeMessage = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
     setMessage(value);
   };

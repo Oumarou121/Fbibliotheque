@@ -167,10 +167,10 @@ function Header() {
                   />
                 </div>
                 <div id="logout-btn" onClick={logoutClient}>
-                  <a className="bbb text-red uil fs-150" href="#">
+                  <div className="bbb text-red uil fs-150">
                     <i className="uil fs-150 text-red uil-signout"></i>
                     Déconnexion
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -301,10 +301,10 @@ function Header() {
                   </Link>
                 </div>
                 <div id="logout-btn" onClick={logoutClient}>
-                  <a className="bbb text-red uil fs-150" href="#">
+                  <div className="bbb text-red uil fs-150" href="#">
                     <i className="uil fs-150 text-red uil-signout"></i>
                     Déconnexion
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -351,3 +351,87 @@ function Profil({ isAuthenticated, userData }) {
 }
 
 export default Header;
+
+
+// import React, { useState, useEffect } from "react";
+// import { Link, useLocation } from "react-router-dom";
+// import "../styles/Header1.css";
+
+// function Header() {
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//   const [isShadow, setIsShadow] = useState(false);
+//   const location = useLocation();
+
+//   const toggleMenu = () => {
+//     setIsMenuOpen(!isMenuOpen);
+//   };
+
+//   useEffect(() => {
+//     const handleScroll = () => {
+//       setIsShadow(window.scrollY > 0);
+//     };
+
+//     window.addEventListener("scroll", handleScroll);
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll);
+//     };
+//   }, []);
+
+//   return (
+//     <header className={`navbar ${isShadow ? "shadow" : ""}`}>
+//       <div className="container">
+//         <Link className="navbar-brand" to="/">
+//           <p>
+//             <span className="b">Medo </span>shop
+//           </p>
+//         </Link>
+//         <button className="navbar-toggler" onClick={toggleMenu}>
+//           <span className="toggler-icon"></span>
+//         </button>
+//         <nav className={`navbar-collapse ${isMenuOpen ? "open" : ""}`}>
+//           <ul className="navbar-nav">
+//             <li className="nav-item">
+//               <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} to="/">
+//                 Home
+//               </Link>
+//             </li>
+//             <li className="nav-item">
+//               <Link className={`nav-link ${location.pathname === "/shop" ? "active" : ""}`} to="/shop">
+//                 Shop
+//               </Link>
+//             </li>
+//             <li className="nav-item">
+//               <Link className={`nav-link ${location.pathname === "/collection" ? "active" : ""}`} to="/collection">
+//                 Collection
+//               </Link>
+//             </li>
+//             <li className="nav-item">
+//               <Link className={`nav-link ${location.pathname === "/contact" ? "active" : ""}`} to="/contact">
+//                 Contact Us
+//               </Link>
+//             </li>
+//             <li className="nav-item">
+//               <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">
+//                 About
+//               </Link>
+//             </li>
+//           </ul>
+//           <div className="navbar-actions">
+//             <button className="btn search-btn">
+//               <i className="uil uil-search"></i>
+//             </button>
+//             <Link to="/cart" className="btn cart-btn">
+//               <i className="uil uil-shopping-cart"></i>
+//               <span className="badge">0</span>
+//             </Link>
+//             <Link to="/login" className="btn login-btn">
+//               <i className="uil uil-user"></i>
+//             </Link>
+//           </div>
+//         </nav>
+//       </div>
+//     </header>
+//   );
+// }
+
+// export default Header;

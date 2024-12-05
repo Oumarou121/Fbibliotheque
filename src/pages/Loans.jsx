@@ -18,7 +18,7 @@ const LoansPage = () => {
   const [currentLoan, setCurrentLoan] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
   const [userData, setUserData] = useState(null);
-  const currentDate = new Date().toISOString().split("T")[0];
+  // const currentDate = new Date().toISOString().split("T")[0];
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
 

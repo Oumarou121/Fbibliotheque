@@ -43,7 +43,7 @@ function ShowMessage({
       }
     };
     fetchMessageData();
-  }, []);
+  }, [currentMessage]);
 
   // Gère les clics en dehors de la modale
   useEffect(() => {

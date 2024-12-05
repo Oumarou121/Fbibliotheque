@@ -86,7 +86,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
     try {
       // Logique pour emprunter le livre
       // await onBorrowBook(currentBook.id);
-      await addEmprunt({clientId: userData?.id,livreId: currentBook.id});
+      await addEmprunt({ clientId: userData?.id, livreId: currentBook.id });
       addAlert(
         "Le livre a été emprunté avec succès.",
         "/emprunts",
@@ -224,7 +224,7 @@ export const BookImage = ({ bookId = 1, type = "normal" }) => {
     const fetchImage = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/livres/${bookId}/image`
+          `https://bbibliotheque-production.up.railway.app/api/livres/${bookId}/image`
         );
         if (response.ok) {
           const imageBlob = await response.blob();

@@ -11,7 +11,7 @@ function Modal({ currentBook, confirmBorrow, setIsModalOpen, isBody = true }) {
           <strong>{currentBook.titre}</strong> par {currentBook.auteur}
         </p> */}
         <h3>{currentBook.titre}</h3>        
-        <BookImage bookId={(isBody == true) ? currentBook.id : currentBook.livreId }/>
+        <BookImage bookId={(isBody === true) ? currentBook.id : currentBook.livreId }/>
         <p>Êtes-vous sûr de vouloir emprunter ce livre ?</p>
         <div className="modal-actions">
           <button className="cancel-btn" onClick={() => setIsModalOpen(false)}>

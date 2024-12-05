@@ -1,9 +1,11 @@
-const BASE_URL = "http://localhost:8080/api/client";
+// const BASE_URL = "http://localhost:8080/api/client";
+const BASE_URL = "https://bbibliotheque-production.up.railway.app/api";
+
 const IVALID_TOKEN = "Error: Token invalide";
 
 export const registerClient = async (clientData) => {
   try {
-    const response = await fetch(`${BASE_URL}/register`, {
+    const response = await fetch(`${BASE_URL}/client/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +26,7 @@ export const registerClient = async (clientData) => {
 
 export const createClient = async (clientData) => {
   try {
-    const response = await fetch(`${BASE_URL}/admin/register`, {
+    const response = await fetch(`${BASE_URL}/client/admin/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +47,7 @@ export const createClient = async (clientData) => {
 
 export const deleteClient = async (clientId) => {
   try {
-    const response = await fetch(`${BASE_URL}/${clientId}`, {
+    const response = await fetch(`${BASE_URL}/client/${clientId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +64,7 @@ export const deleteClient = async (clientId) => {
 
 export const loginClient = async (loginData) => {
   try {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${BASE_URL}/client/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +90,7 @@ export const logoutClient = async () => {
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/logout`, {
+    const response = await fetch(`${BASE_URL}/client/logout`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -117,7 +119,7 @@ export const getClientData = async () => {
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/me`, {
+    const response = await fetch(`${BASE_URL}/client/me`, {
       method: "GET",
       headers: {
         Authorization: token,
@@ -181,7 +183,7 @@ export const GetCartByClient = async (clientId) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/cart/${clientId}`, {
+    const response = await fetch(`${BASE_URL}/cart/${clientId}`, {
       method: "GET",
       headers: {
         Authorization: token,
@@ -213,7 +215,7 @@ export const AddToCart = async (cartData) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/cart", {
+    const response = await fetch(`${BASE_URL}/cart`, {
       method: "POST",
       headers: {
         Authorization: token,
@@ -244,7 +246,7 @@ export const RemoveFromCart = async (cartId) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/cart/${cartId}`, {
+    const response = await fetch(`${BASE_URL}/cart/${cartId}`, {
       method: "DELETE",
       headers: {
         Authorization: token,
@@ -304,16 +306,13 @@ export const GetFavoritesByClient = async (clientId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/favorites/${clientId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/favorites/${clientId}`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -339,7 +338,7 @@ export const AddToFavorite = async (favoriteData) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/favorites", {
+    const response = await fetch(`${BASE_URL}/favorites`, {
       method: "POST",
       headers: {
         Authorization: token,
@@ -370,16 +369,13 @@ export const RemoveFromFavorite = async (favoriteId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/favorites/${favoriteId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/favorites/${favoriteId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -429,16 +425,13 @@ export const getAdherentByClient = async (clientId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/adherents/${clientId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/adherents/${clientId}`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
     if (!response.ok) {
       const error = await response.text();
       throw new Error(error);
@@ -459,7 +452,7 @@ export const addAdherent = async (Data) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/adherents", {
+    const response = await fetch(`${BASE_URL}/adherents`, {
       method: "POST",
       headers: {
         Authorization: token,
@@ -486,7 +479,7 @@ export const updateAdherent = async (Data) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/adherents", {
+    const response = await fetch(`${BASE_URL}/adherents`, {
       method: "PUT",
       headers: {
         // Authorization: token,
@@ -513,16 +506,13 @@ export const deleteAdherentByClient = async (clientId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/adherents/client/${clientId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/adherents/client/${clientId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -544,7 +534,7 @@ export const addEmprunt = async (Data) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/emprunts", {
+    const response = await fetch(`${BASE_URL}/emprunts`, {
       method: "POST",
       headers: {
         Authorization: token,
@@ -571,7 +561,7 @@ export const addEmprunt = async (Data) => {
 //   }
 
 //   try {
-//     const response = await fetch(`http://localhost:8080/api/emprunts/${empruntId}`, {
+//     const response = await fetch(`${BASE_URL}/emprunts/${empruntId}`, {
 //       method: "PUT",
 //       headers: {
 //         Authorization: token,
@@ -600,7 +590,7 @@ export const updateEmprunt = async (Data) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/emprunts`, {
+    const response = await fetch(`${BASE_URL}/emprunts`, {
       method: "PUT",
       headers: {
         Authorization: token,
@@ -629,16 +619,13 @@ export const getEmprunt = async (clientId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/emprunts/${clientId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/emprunts/${clientId}`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -660,7 +647,7 @@ export const getAllEmprunt = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/emprunts`, {
+    const response = await fetch(`${BASE_URL}/emprunts`, {
       method: "GET",
       headers: {
         Authorization: token,
@@ -688,16 +675,13 @@ export const deleteEmprunt = async (empruntId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/emprunts/${empruntId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/emprunts/${empruntId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -719,16 +703,13 @@ export const getLivreById = async (livreId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/livres/${livreId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/livres/${livreId}`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -745,7 +726,7 @@ export const getLivreById = async (livreId) => {
 
 export const getLivres = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/livres`, {
+    const response = await fetch(`${BASE_URL}/livres`, {
       method: "GET",
     });
 
@@ -771,16 +752,13 @@ export const updateClient = async (clientId, clientData) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/client/${clientId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(clientData),
-      }
-    );
+    const response = await fetch(`${BASE_URL}/client/${clientId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(clientData),
+    });
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
@@ -803,7 +781,7 @@ export const getClients = async () => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/client", {
+    const response = await fetch(`${BASE_URL}/client`, {
       method: "GET",
     });
     if (!response.ok) {
@@ -830,7 +808,7 @@ export const createLivre = async (Data) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/livres", {
+    const response = await fetch(`${BASE_URL}/livres`, {
       method: "POST",
       headers: {
         Authorization: token,
@@ -861,16 +839,13 @@ export const updateLivre = async (livreId, Data) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/livres/${livreId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(Data),
-      }
-    );
+    const response = await fetch(`${BASE_URL}/livres/${livreId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Data),
+    });
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
@@ -895,15 +870,12 @@ export const deleteLivre = async (livreId) => {
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/livres/${livreId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/livres/${livreId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
@@ -920,7 +892,7 @@ export const deleteLivre = async (livreId) => {
 
 export const getAllMessages = async () => {
   try {
-    const response = await fetch("http://localhost:8080/api/messages", {
+    const response = await fetch(`${BASE_URL}/messages`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -942,15 +914,12 @@ export const getAllMessages = async () => {
 
 export const getMessagesByReceiver = async (receiver) => {
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/messages/${receiver}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/messages/${receiver}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -967,15 +936,12 @@ export const getMessagesByReceiver = async (receiver) => {
 
 export const deleteMessage = async (messageId) => {
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/messages/${messageId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/messages/${messageId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -990,7 +956,7 @@ export const deleteMessage = async (messageId) => {
 
 export const sendClientMessage = async (message) => {
   try {
-    const response = await fetch("http://localhost:8080/api/messages", {
+    const response = await fetch(`${BASE_URL}/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1011,7 +977,7 @@ export const sendClientMessage = async (message) => {
 
 export const sendAdminMessage = async (message) => {
   try {
-    const response = await fetch("http://localhost:8080/api/messages/admin", {
+    const response = await fetch(`${BASE_URL}/messages/admin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1032,15 +998,12 @@ export const sendAdminMessage = async (message) => {
 
 export const getEmailById = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/client/email/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/client/email/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();
@@ -1057,15 +1020,12 @@ export const getEmailById = async (id) => {
 
 export const getTitreById = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/livres/titre/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}/livres/titre/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       const error = await response.text();

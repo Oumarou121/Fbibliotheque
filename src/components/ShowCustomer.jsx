@@ -166,11 +166,35 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
             type: adherent?.type,
             nbrEmprunt: adherent?.nbrEmprunt || 0,
           });
-        }
-        addAlert("Client ajoute avec réussie !", "", "", "success");
 
-        // Met à jour la liste des clients dans CustomersPage
-        updateCustomers({ ...clientData1, id: clientId, isNew: true });
+          if (adherent?.nbrEmprunt === undefined || adherent?.nbrEmprunt < 0) {
+            if (adherent?.type === 1) {
+              setAdherent((prevAdherent) => ({
+                ...prevAdherent,
+                nbrEmprunt: 5,
+              }));
+            }
+
+            if (adherent?.type === 2) {
+              setAdherent((prevAdherent) => ({
+                ...prevAdherent,
+                nbrEmprunt: 15,
+              }));
+            }
+
+            if (adherent?.type === 3) {
+              setAdherent((prevAdherent) => ({
+                ...prevAdherent,
+                nbrEmprunt: 35,
+              }));
+            }
+          }
+
+          addAlert("Client ajoute avec réussie !", "", "", "success");
+
+          // Met à jour la liste des clients dans CustomersPage
+          updateCustomers({ ...clientData1, id: clientId, isNew: true });
+        }
       } else {
         await updateClient(userData?.id, clientData);
 

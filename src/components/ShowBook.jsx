@@ -61,7 +61,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
       }
     };
     fetchBookData();
-  }, []);
+  }, [currentBook]);
 
   // Gère les clics en dehors de la modale
   useEffect(() => {
@@ -96,9 +96,9 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
       if (
         !book?.titre ||
         !book?.auteur ||
-        !book?.anneePublication > 0 ||
-        !book?.quantite > 0 ||
-        !book?.nbrEmprunt > 0 ||
+        !book?.anneePublication >= 0 ||
+        !book?.quantite >= 0 ||
+        !book?.nbrEmprunt >= 0 ||
         !imageBinary
       ) {
         addAlert("Veuillez remplir tous les champs.", "", "", "error");
@@ -108,9 +108,9 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
       if (
         !book?.titre ||
         !book?.auteur ||
-        !book?.anneePublication > 0 ||
-        !book?.quantite > 0 ||
-        !book?.nbrEmprunt > 0
+        !book?.anneePublication >= 0 ||
+        !book?.quantite >= 0 ||
+        !book?.nbrEmprunt >= 0
       ) {
         addAlert("Veuillez remplir tous les champs.", "", "", "error");
         return;

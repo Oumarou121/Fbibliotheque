@@ -9,7 +9,7 @@ function Home() {
   const navigate = useNavigate();
 
   const navigation = () => {
-    navigate("/library#content");
+    navigate("/library#showMore");
   };
 
   useEffect(() => {

@@ -4,7 +4,6 @@ import {
   GetFavoritesByClient,
   getClientData,
   RemoveFromFavorite,
-  getTotalQuantityInCart,
   isInCart,
 } from "../Api";
 import TopBody from "../components/TopBody";

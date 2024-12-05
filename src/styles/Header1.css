@@ -1,0 +1,134 @@
+/* General Navbar Styles */
+.navbar {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .navbar.shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar .navbar-brand p {
+    font-size: 1.5rem;
+    margin: 0;
+    color: black;
+  }
+  
+  .navbar .navbar-brand .b {
+    color: #f0a500;
+    font-weight: bold;
+  }
+  
+  .navbar-toggler {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+  }
+  
+  .toggler-icon {
+    width: 25px;
+    height: 3px;
+    background-color: black;
+    display: block;
+    margin: 5px 0;
+  }
+  
+  /* Navbar Collapse */
+  .navbar-collapse {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .navbar-collapse.open {
+    display: block;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-nav .nav-item {
+    margin: 0 10px;
+  }
+  
+  .navbar-nav .nav-link {
+    text-decoration: none;
+    color: #555;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  
+  .navbar-nav .nav-link.active {
+    color: #f0a500;
+    font-weight: bold;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #f0a500;
+  }
+  
+  /* Actions */
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-actions .btn {
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .navbar-actions .cart-btn {
+    position: relative;
+  }
+  
+  .navbar-actions .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: #dc3545;
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 50%;
+    font-size: 12px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .navbar-toggler {
+      display: block;
+    }
+  
+    .navbar-collapse {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      background-color: #fff;
+      padding: 1rem;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      left: 0;
+      z-index: 9;
+    }
+  
+    .navbar-collapse.open {
+      display: flex;
+    }
+  }
+  

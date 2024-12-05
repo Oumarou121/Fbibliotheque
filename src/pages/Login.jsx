@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../styles/Login.css";
 import { registerClient, loginClient, getClientData } from "../Api.js";
 import { useLoader } from "../LoaderContext";
@@ -292,9 +292,9 @@ function FLogin({
           localStorage.setItem("authToken", token);
           console.log("Connexion réussie, token:", token);
           const data = await getClientData();
-          if (data.role === 'admin') {
+          if (data.role === "admin") {
             navigate("/admin");
-          }else{
+          } else {
             navigate("/");
           }
         } catch (err) {
@@ -744,12 +744,11 @@ function FRegister({
           const registeredClient = await registerClient(clientData);
           console.log("Client enregistré:", registeredClient);
           const data = await getClientData();
-          if (data.role === 'admin') {
+          if (data.role === "admin") {
             navigate("/admin");
-          }else{
+          } else {
             navigate("/");
           }
-          
         } catch (err) {
           error2.textContent = err.message;
           password2.classList.add("error");
