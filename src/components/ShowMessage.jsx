@@ -179,7 +179,7 @@ function ShowMessage({
             {loading ? (
               <button disabled>Loading...</button>
             ) : isDelete ? (
-              <button className="deleteBtn" onClick={() => deleteAction()}>
+              <button className="delete-btn" onClick={() => deleteAction()}>
                 Delete
               </button>
             ) : isEditing ? (

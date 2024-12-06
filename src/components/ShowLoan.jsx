@@ -118,7 +118,7 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
         updateLoans({ ...loanCurrent, isNew: true });
       } else {
         //console.log(currentLoan);
-        const l = await updateEmprunt(currentLoan);
+        await updateEmprunt(currentLoan);
         //console.log(l);
 
         // Met à jour la liste des loans dans LoansPage
@@ -231,7 +231,7 @@ function ShowLoan({ loan, onClose, updateLoans, isDelete }) {
             {loading ? (
               <button disabled>Loading...</button>
             ) : isDelete ? (
-              <button className="deleteBtn" onClick={() => deleteUser()}>
+              <button className="delete-btn" onClick={() => deleteUser()}>
                 Delete
               </button>
             ) : isEditing ? (

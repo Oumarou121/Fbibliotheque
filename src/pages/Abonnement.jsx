@@ -34,6 +34,7 @@ function AbonnementContent() {
   const [adherent, setAdherent] = useState([]);
   const [userData, setUserData] = useState(null);
   const [alerts, setAlerts] = useState([]); // Gestion des alertes
+  const [isLoading, setIsLoading] = useState(true);
 
   // Ajouter une alerte
   const addAlert = (message, link, linkText, type) => {
@@ -52,12 +53,7 @@ function AbonnementContent() {
     const token = localStorage.getItem("authToken");
     if (!token) {
       //console.error("Unauthenticated user.");
-      addAlert(
-        "You must be logged in to subscribe.",
-        "",
-        "",
-        "warning"
-      );
+      addAlert("You must be logged in to subscribe.", "", "", "warning");
       return;
     }
 
@@ -111,9 +107,12 @@ function AbonnementContent() {
           //  "Error retrieving user data:",
           //  error
           //);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         //console.error("Unauthenticated user.");
+        setIsLoading(false);
       }
     };
 
@@ -137,30 +136,34 @@ function AbonnementContent() {
         Choose your subscription plan
       </h1>
       <div className="plans-container">
-        {plans.map((plan) => (
-          <div
-            key={plan.id}
-            className={`plan-card ${plan.isPremium ? "premium" : ""}`}
-          >
-            <h2 className="fs-200">{plan.name}</h2>
-            <p className="price">{plan.price}</p>
-            <ul className="features">
-              {plan.features.map((feature, index) => (
-                <li key={index}>
-                  <FaCheckCircle className="icon-check" /> {feature}
-                </li>
-              ))}
-            </ul>
-            <button
-              className={`btn-subscribe ${
-                selectedPlan === plan.id ? "subscribed" : ""
-              }`}
-              onClick={() => handleSubscribe(plan.id)}
+        {isLoading ? (
+          <div className="loading">Loading...</div> // Afficher le message de chargement
+        ) : (
+          plans.map((plan) => (
+            <div
+              key={plan.id}
+              className={`plan-card ${plan.isPremium ? "premium" : ""}`}
             >
-              {selectedPlan === plan.id ? "Subscribed" : "Subscribe"}
-            </button>
-          </div>
-        ))}
+              <h2 className="fs-200">{plan.name}</h2>
+              <p className="price">{plan.price}</p>
+              <ul className="features">
+                {plan.features.map((feature, index) => (
+                  <li key={index}>
+                    <FaCheckCircle className="icon-check" /> {feature}
+                  </li>
+                ))}
+              </ul>
+              <button
+                className={`btn-subscribe ${
+                  selectedPlan === plan.id ? "subscribed" : ""
+                }`}
+                onClick={() => handleSubscribe(plan.id)}
+              >
+                {selectedPlan === plan.id ? "Subscribed" : "Subscribe"}
+              </button>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -741,7 +741,7 @@ function FRegister({
         };
         //console.log(clientData);
         try {
-          const registeredClient = await registerClient(clientData);
+          await registerClient(clientData);
           //console.log("Client enregistré:", registeredClient);
           const data = await getClientData();
           if (data.role === "admin") {

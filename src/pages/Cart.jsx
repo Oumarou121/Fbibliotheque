@@ -175,7 +175,7 @@ const CartBody = () => {
         {isLoading ? (
           <div className="loading">Loading...</div> // Afficher le message de chargement
         ) : cartItems.length > 0 ? (
-          <section className="cartContent">
+          <section className="books-grid">
             {cartItems.map((book) => (
               <BookCard
                 key={book.id}

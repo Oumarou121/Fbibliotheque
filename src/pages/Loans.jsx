@@ -21,6 +21,8 @@ const LoansPage = () => {
   // const currentDate = new Date().toISOString().split("T")[0];
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState(null);
 
   const addAlert = (message, link, linkText, type) => {
     setAlerts((prevAlerts) => [
@@ -71,13 +73,18 @@ const LoansPage = () => {
         try {
           const user = await getClientData();
           setUserData(user);
+          setRole(user?.role);
           const loans = await getAllEmprunt();
           setLoans(loans);
           setFilteredLoans(loans);
         } catch (error) {
           //console.error("Erreur lors de la récupération des clients", error);
           setLoans([]);
+        } finally {
+          setIsLoading(false);
         }
+      } else {
+        setIsLoading(false);
       }
     };
     getLoans();
@@ -210,7 +217,7 @@ const LoansPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={() => handleLoanModal()}>Add New Loan</button>
+          <button disabled={role !== "admin"} onClick={() => handleLoanModal()}>Add New Loan</button>
         </div>
 
         <table id="productTable">
@@ -225,61 +232,67 @@ const LoansPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredLoans.map((loan) => {
-              return (
-                <tr key={loan.id}>
-                  <td
-                    className={
-                      compare2(loan.dateRetourPrevue)
-                        ? "fin"
-                        : compare1(loan.dateRetourPrevue)
-                        ? "veille"
-                        : ""
-                    }
-                    title={
-                      compare2(loan.dateRetourPrevue)
-                        ? "Date limite depasse"
-                        : compare1(loan.dateRetourPrevue)
-                        ? "Veille de la date limite"
-                        : ""
-                    }
-                  >
-                    {loan.id}
-                  </td>
-                  <td>{loan.clientId}</td>
-                  <td>{loan.livreId}</td>
-                  <td>{loan.dateEmprunt}</td>
-                  <td>{loan.dateRetourPrevue}</td>
-                  <td className="table-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleLoanModal(loan, false)}
+            {isLoading ? (
+              <div className="loading">Loading...</div> // Afficher le message de chargement
+            ) : role === "admin" ? (
+              filteredLoans.map((loan) => {
+                return (
+                  <tr key={loan.id}>
+                    <td
+                      className={
+                        compare2(loan.dateRetourPrevue)
+                          ? "fin"
+                          : compare1(loan.dateRetourPrevue)
+                          ? "veille"
+                          : ""
+                      }
+                      title={
+                        compare2(loan.dateRetourPrevue)
+                          ? "Date limite depasse"
+                          : compare1(loan.dateRetourPrevue)
+                          ? "Veille de la date limite"
+                          : ""
+                      }
                     >
-                      Détails
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleLoanModal(loan, true)}
-                    >
-                      Delete
-                    </button>
-                    {compare1(loan.dateRetourPrevue) ? (
-                      loading ? (
-                        <button disabled>Sending...</button>
-                      ) : (
-                        <button
-                          title="Sending warning"
-                          className="send-btn"
-                          onClick={() => sendWaring(loan)}
-                        >
-                          Send warning
-                        </button>
-                      )
-                    ) : null}
-                  </td>
-                </tr>
-              );
-            })}
+                      {loan.id}
+                    </td>
+                    <td>{loan.clientId}</td>
+                    <td>{loan.livreId}</td>
+                    <td>{loan.dateEmprunt}</td>
+                    <td>{loan.dateRetourPrevue}</td>
+                    <td className="table-actions">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleLoanModal(loan, false)}
+                      >
+                        Détails
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleLoanModal(loan, true)}
+                      >
+                        Delete
+                      </button>
+                      {compare1(loan.dateRetourPrevue) ? (
+                        loading ? (
+                          <button disabled>Sending...</button>
+                        ) : (
+                          <button
+                            title="Sending warning"
+                            className="send-btn"
+                            onClick={() => sendWaring(loan)}
+                          >
+                            Send warning
+                          </button>
+                        )
+                      ) : null}
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <p>Unauthenticated user or insufficient access rights</p>
+            )}
           </tbody>
         </table>
       </div>

@@ -258,3 +258,7 @@ td button {
 .veille {
   color: orange;
 }
+
+button:disabled{
+  cursor: not-allowed;
+}

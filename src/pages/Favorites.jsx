@@ -82,25 +82,6 @@ const Favorite = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchFavorites = async () => {
-  //     const token = localStorage.getItem("authToken");
-  //     if (!token) {
-  //       throw new Error("Unauthenticated user.");
-  //     }
-  //     try {
-  //       const user = await getClientData();
-  //       const books = await GetFavoritesByClient(user?.id);
-  //       setFavorites(books);
-  //       setUserData(user);
-  //     } catch (error) {
-  //       //console.log("Error getting favorites", error);
-  //     }
-  //   };
-
-  //   fetchFavorites();
-  // }, []);
-
   useEffect(() => {
     const fetchFavorites = async () => {
       setIsLoading(true);
@@ -158,7 +139,8 @@ const Favorite = () => {
         {isLoading ? (
           <div className="loading">Loading...</div> // Afficher le message de chargement
         ) : favorites.length > 0 ? (
-          <section className="cartContent">
+          // <section className="cartContent">
+            <section className="books-grid">
             {favorites.map((book) => (
               <BookCard
                 key={book.id}

@@ -11,6 +11,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
   const [alerts, setAlerts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentBook, setCurrentBook] = useState(null);
+  const token = localStorage.getItem("authToken");
 
   // Ajouter une alerte
   const addAlert = (message, link, linkText, type) => {
@@ -27,6 +28,10 @@ export const BookList = ({ name, books, onBorrowBook }) => {
 
   // Gestionnaire des favoris
   const FavoriteHandler = async ({ livreId, clientId }) => {
+    if (!token) {
+      addAlert("You must be logged in to add favorite.", "", "", "warning");
+      return;
+    }
     try {
       const result = await isInFavorite({ livreId, clientId });
       if (result === "added") {
@@ -45,13 +50,17 @@ export const BookList = ({ name, books, onBorrowBook }) => {
         );
       }
     } catch (error) {
-      //console.error("Error while managing favorites:", error);
+      console.error("Error while managing favorites:", error);
       addAlert("An error has occurred.", null, null);
     }
   };
 
   // Gestionnaire du panier
   const CartHandler = async ({ clientId, livreId, quantity }) => {
+    if (!token) {
+      addAlert("You must be logged in to add cart.", "", "", "warning");
+      return;
+    }
     try {
       const result = await isInCart({ clientId, livreId, quantity });
       if (result === "added") {
@@ -70,19 +79,23 @@ export const BookList = ({ name, books, onBorrowBook }) => {
         );
       }
     } catch (error) {
-      //console.error("Error while managing the cart:", error);
+      console.error("Error while managing the cart:", error);
       addAlert("An error has occurred.", null, null);
     }
   };
 
   // Ouvrir la modale d'emprunt
   const handleBorrowClick = (book) => {
-    setCurrentBook(book); // Sauvegarder le livre sélectionné
-    setIsModalOpen(true); // Ouvrir la modale
+    setCurrentBook(book); 
+    setIsModalOpen(true);
   };
 
   // Confirmer l'emprunt du livre
   const confirmBorrow = async () => {
+    if (!token) {
+      addAlert("You must be logged in to borrow book.", "", "", "warning");
+      return;
+    }
     try {
       // Logique pour emprunter le livre
       // await onBorrowBook(currentBook.id);
@@ -119,14 +132,13 @@ export const BookList = ({ name, books, onBorrowBook }) => {
     }
   };
 
-  // Récupérer les données de l'utilisateur
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("authToken");
       if (token) {
         try {
-          const user = await getClientData(); // Récupérer les données de l'utilisateur
-          setUserData(user); // Mettre à jour les données utilisateur
+          const user = await getClientData(); 
+          setUserData(user); 
         } catch (error) {
           //console.error("Error retrieving user data", error);
         }
@@ -136,7 +148,6 @@ export const BookList = ({ name, books, onBorrowBook }) => {
     fetchUserData();
   }, []);
 
-  //Daily live of hight school boyse
 
   return (
     <>
@@ -213,35 +224,56 @@ export const BookList = ({ name, books, onBorrowBook }) => {
 };
 
 // Composant pour afficher l'image du livre
+// export const BookImage = ({ bookId = 1, type = "normal" }) => {
+//   const [imageUrl, setImageUrl] = useState(null);
+//   useEffect(() => {
+//     let isMounted = true;
+
+//     const fetchImage = async () => {
+//       try {
+//         const response = await fetch(
+//           `https://bbibliotheque-production.up.railway.app/api/livres/${bookId}/image`
+//         );
+//         if (response.ok) {
+//           const imageBlob = await response.blob();
+//           const imageObjectUrl = URL.createObjectURL(imageBlob);
+//           if (isMounted) setImageUrl(imageObjectUrl);
+//         }
+//       } catch (error) {
+//         //console.error("Error fetching image:", error);
+//       }
+//     };
+
+//     fetchImage();
+
+//     return () => {
+//       isMounted = false;
+//       if (imageUrl) {
+//         URL.revokeObjectURL(imageUrl);
+//       }
+//     };
+//   }, [bookId, imageUrl]);
+
+//   return (
+//     <div>
+//       {imageUrl ? (
+//         <img src={imageUrl} className={`book-image-${type}`} alt="Book" />
+//       ) : (
+//         <p>Loading image...</p>
+//       )}
+//     </div>
+//   );
+// };
+
 export const BookImage = ({ bookId = 1, type = "normal" }) => {
   const [imageUrl, setImageUrl] = useState(null);
+
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchImage = async () => {
-      try {
-        const response = await fetch(
-          `https://bbibliotheque-production.up.railway.app/api/livres/${bookId}/image`
-        );
-        if (response.ok) {
-          const imageBlob = await response.blob();
-          const imageObjectUrl = URL.createObjectURL(imageBlob);
-          if (isMounted) setImageUrl(imageObjectUrl);
-        }
-      } catch (error) {
-        //console.error("Error fetching image:", error);
-      }
-    };
-
-    fetchImage();
-
-    return () => {
-      isMounted = false;
-      if (imageUrl) {
-        URL.revokeObjectURL(imageUrl);
-      }
-    };
-  }, [bookId, imageUrl]);
+    // Mettez à jour l'URL de l'image lorsque bookId change
+    setImageUrl(
+      `https://bbibliotheque-production.up.railway.app/api/livres/${bookId}/image`
+    );
+  }, [bookId]); // Utilisez bookId comme dépendance
 
   return (
     <div>

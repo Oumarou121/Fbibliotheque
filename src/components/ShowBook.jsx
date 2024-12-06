@@ -135,7 +135,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
         quantite: book.quantite,
         nbrEmprunt: book.nbrEmprunt,
         image: imageBinary || book.image,
-        description: null,
+        description: book.description || null,
       };
 
       //console.log(BookData);
@@ -308,7 +308,7 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
             {loading ? (
               <button disabled>Loading...</button>
             ) : isDelete ? (
-              <button className="deleteBtn" onClick={() => deleteBook()}>
+              <button className="delete-btn" onClick={() => deleteBook()}>
                 Delete
               </button>
             ) : isEditing ? (

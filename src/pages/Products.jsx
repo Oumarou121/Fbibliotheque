@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Customers.css";
-import { getLivres } from "../Api";
+import { getLivres, getClientData } from "../Api";
 import ShowBook from "../components/ShowBook.jsx";
 
 const ProductsPage = () => {
@@ -10,6 +10,8 @@ const ProductsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentBook, setCurrentBook] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState(null);
 
   const handleBookModal = (book = null, isDel = false) => {
     setCurrentBook(book);
@@ -19,13 +21,22 @@ const ProductsPage = () => {
 
   useEffect(() => {
     const getBooks = async () => {
-      try {
-        const books = await getLivres();
-        setBooks(books);
-        setFilteredBooks(books);
-      } catch (error) {
-        //console.error("Error retrieving books", error);
-        setBooks([]);
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        try {
+          const user = await getClientData();
+          setRole(user?.role);
+          const books = await getLivres();
+          setBooks(books);
+          setFilteredBooks(books);
+        } catch (error) {
+          //console.error("Error retrieving books", error);
+          setBooks([]);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
       }
     };
     getBooks();
@@ -84,7 +95,7 @@ const ProductsPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={() => handleBookModal()}>Add New Book</button>
+          <button disabled={role !== "admin"} onClick={() => handleBookModal()}>Add New Book</button>
         </div>
 
         <table id="productTable">
@@ -98,30 +109,36 @@ const ProductsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredBooks.map((book) => {
-              return (
-                <tr key={book.id}>
-                  <td>{book.id}</td>
-                  <td>{book.titre}</td>
-                  <td>{book.nbrEmprunt}</td>
-                  <td>{book.quantite}</td>
-                  <td className="table-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleBookModal(book, false)}
-                    >
-                      Détails
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleBookModal(book, true)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            {isLoading ? (
+              <div className="loading">Loading...</div> // Afficher le message de chargement
+            ) : role === "admin" ? (
+              filteredBooks.map((book) => {
+                return (
+                  <tr key={book.id}>
+                    <td>{book.id}</td>
+                    <td>{book.titre}</td>
+                    <td>{book.nbrEmprunt}</td>
+                    <td>{book.quantite}</td>
+                    <td className="table-actions">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleBookModal(book, false)}
+                      >
+                        Détails
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleBookModal(book, true)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <p>Unauthenticated user or insufficient access rights</p>
+            )}
           </tbody>
         </table>
       </div>

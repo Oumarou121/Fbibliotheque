@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Customers.css";
-import { getClients } from "../Api";
+import { getClients, getClientData } from "../Api";
 import ShowCustomer from "../components/ShowCustomer";
 
 const CustomersPage = () => {
@@ -10,6 +10,8 @@ const CustomersPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCustomer, setCurrentCustomer] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState(null);
 
   const handleCustomerModal = (customer = null, isDel = false) => {
     setCurrentCustomer(customer);
@@ -19,12 +21,21 @@ const CustomersPage = () => {
 
   useEffect(() => {
     const getCustomers = async () => {
-      try {
-        const customers = await getClients();
-        setCustomers(customers);
-      } catch (error) {
-        //console.error("Error retrieving customers", error);
-        setCustomers([]);
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        try {
+          const user = await getClientData();
+          setRole(user?.role);
+          const customers = await getClients();
+          setCustomers(customers);
+        } catch (error) {
+          //console.error("Error retrieving customers", error);
+          setCustomers([]);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
       }
     };
     getCustomers();
@@ -93,7 +104,7 @@ const CustomersPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={() => handleCustomerModal()}>
+          <button disabled={role !== "admin"} onClick={() => handleCustomerModal()}>
             Add New Customer
           </button>
         </div>
@@ -109,30 +120,36 @@ const CustomersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredCustomers.map((customer) => {
-              return (
-                <tr key={customer.id}>
-                  <td>{customer.id}</td>
-                  <td>{customer.nom}</td>
-                  <td>{customer.email}</td>
-                  <td>{customer.role}</td>
-                  <td className="table-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleCustomerModal(customer, false)}
-                    >
-                      Détails
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleCustomerModal(customer, true)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            {isLoading ? (
+              <div className="loading">Loading...</div> // Afficher le message de chargement
+            ) : role === "admin" ? (
+              filteredCustomers.map((customer) => {
+                return (
+                  <tr key={customer.id}>
+                    <td>{customer.id}</td>
+                    <td>{customer.nom}</td>
+                    <td>{customer.email}</td>
+                    <td>{customer.role}</td>
+                    <td className="table-actions">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleCustomerModal(customer, false)}
+                      >
+                        Détails
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleCustomerModal(customer, true)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <p>Unauthenticated user or insufficient access rights</p>
+            )}
           </tbody>
         </table>
       </div>

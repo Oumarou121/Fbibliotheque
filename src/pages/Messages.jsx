@@ -11,6 +11,8 @@ const MessagesPage = () => {
   const [currentMessage, setCurrentMessage] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState(null);
 
   const handleMessageModal = (message = null, isDel = false) => {
     setCurrentMessage(message);
@@ -40,13 +42,18 @@ const MessagesPage = () => {
         try {
           const user = await getClientData();
           setUserData(user);
+          setRole(user?.role);
           const messages = await getAllMessages();
           setMessages(messages);
           setFilteredMessages(messages);
         } catch (error) {
           //console.error("Error retrieving messages", error);
           setMessages([]);
+        } finally {
+          setIsLoading(false);
         }
+      } else {
+        setIsLoading(false);
       }
     };
     getMessages();
@@ -115,7 +122,7 @@ const MessagesPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={() => handleMessageModal()}>Add New Message</button>
+          <button disabled={role !== "admin"} onClick={() => handleMessageModal()}>Add New Message</button>
         </div>
 
         <table id="productTable">
@@ -129,30 +136,36 @@ const MessagesPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredMessages.map((message) => {
-              return (
-                <tr key={message.id}>
-                  <td>{message.id}</td>
-                  <td>{message.admin ? "Admin" : message.expediteur}</td>
-                  <td>{truncateByLetters(message.message)}</td>
-                  <td>{message.admin ? message.recepteur : "Admin"}</td>
-                  <td className="table-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleMessageModal(message, false)}
-                    >
-                      Détails
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleMessageModal(message, true)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            {isLoading ? (
+              <div className="loading">Loading...</div> // Afficher le message de chargement
+            ) : role === "admin" ? (
+              filteredMessages.map((message) => {
+                return (
+                  <tr key={message.id}>
+                    <td>{message.id}</td>
+                    <td>{message.admin ? "Admin" : message.expediteur}</td>
+                    <td>{truncateByLetters(message.message)}</td>
+                    <td>{message.admin ? message.recepteur : "Admin"}</td>
+                    <td className="table-actions">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleMessageModal(message, false)}
+                      >
+                        Détails
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleMessageModal(message, true)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <p>Unauthenticated user or insufficient access rights</p>
+            )}
           </tbody>
         </table>
       </div>

@@ -292,10 +292,10 @@ function Header() {
                   </Link>
                 </div>
                 <div id="logout-btn" onClick={logoutClient}>
-                  <div className="bbb text-red uil fs-150" href="#">
+                  <a className="bbb text-red uil fs-150" href="#">
                     <i className="uil fs-150 text-red uil-signout"></i>
                     Déconnexion
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -334,7 +334,7 @@ function Profil({ isAuthenticated, userData }) {
         </Link>
       ) : (
         <Link className="bbb text-black uil fs-150" to="/login">
-          <i className="uil fs-150 uil-user"></i> Se connecter
+          <i className="uil fs-150 uil-user"></i>Se connecter
         </Link>
       )}
     </>

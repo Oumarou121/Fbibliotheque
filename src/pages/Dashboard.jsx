@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import { getClients, getLivres, getAllMessages } from "../Api";
+import { getClients, getLivres, getAllMessages, getClientData } from "../Api";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -9,6 +9,8 @@ const DashboardPage = () => {
   const [books, setBooks] = useState([]);
   // const [loans, setLoans] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState(null);
 
   const navigation1 = () => {
     navigate("/admin/customers");
@@ -35,23 +37,33 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      try {
-        const allCustomers = await getClients();
-        const lastCustomers = allCustomers.slice(-3); // Récupère les 3 derniers
-        setCustomers(lastCustomers);
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        try {
+          const user = await getClientData();
+          setRole(user?.role);
 
-        const allBooks = await getLivres();
-        const lastBooks = allBooks.slice(-3); // Récupère les 3 derniers
-        setBooks(lastBooks);
+          const allCustomers = await getClients();
+          const lastCustomers = allCustomers.slice(-3); // Récupère les 3 derniers
+          setCustomers(lastCustomers);
 
-        const allMessages = await getAllMessages();
-        const lastMessages = allMessages.slice(-3); // Récupère les 3 derniers
-        setMessages(lastMessages);
-      } catch (error) {
-        //console.error("Error retrieving data", error);
-        setCustomers([]);
-        setBooks([]);
-        setMessages([]);
+          const allBooks = await getLivres();
+          const lastBooks = allBooks.slice(-3); // Récupère les 3 derniers
+          setBooks(lastBooks);
+
+          const allMessages = await getAllMessages();
+          const lastMessages = allMessages.slice(-3); // Récupère les 3 derniers
+          setMessages(lastMessages);
+        } catch (error) {
+          //console.error("Error retrieving data", error);
+          setCustomers([]);
+          setBooks([]);
+          setMessages([]);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
       }
     };
     getData();
@@ -62,18 +74,18 @@ const DashboardPage = () => {
       <div className="admin-container">
         <h1 className="page-title">Dashboard</h1>
         <div className="cards-grid">
-          <div className="card" onClick={navigation1}>
+          <button disabled={role !== "admin"} className="card" onClick={navigation1}>
             <h3>Customers</h3>
             <p>Manage all your customers</p>
-          </div>
-          <div className="card" onClick={navigation2}>
+          </button>
+          <button disabled={role !== "admin"} className="card" onClick={navigation2}>
             <h3>Products</h3>
             <p>Manage product inventory</p>
-          </div>
-          <div className="card" onClick={navigation4}>
+          </button>
+          <button disabled={role !== "admin"} className="card" onClick={navigation4}>
             <h3>Messages</h3>
             <p>Respond to user queries</p>
-          </div>
+          </button>
         </div>
       </div>
       <div className="admin-container">
@@ -89,16 +101,22 @@ const DashboardPage = () => {
               </tr>
             </thead>
             <tbody>
-              {customers.map((customer) => {
-                return (
-                  <tr key={customer.id}>
-                    <td>{customer.id}</td>
-                    <td>{customer.nom}</td>
-                    <td>{customer.email}</td>
-                    <td>{customer.role}</td>
-                  </tr>
-                );
-              })}
+              {isLoading ? (
+                <div className="loading">Loading...</div> // Afficher le message de chargement
+              ) : role === "admin" ? (
+                customers.map((customer) => {
+                  return (
+                    <tr key={customer.id}>
+                      <td>{customer.id}</td>
+                      <td>{customer.nom}</td>
+                      <td>{customer.email}</td>
+                      <td>{customer.role}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <p>Unauthenticated user or insufficient access rights</p>
+              )}
             </tbody>
           </table>
         </div>
@@ -116,16 +134,22 @@ const DashboardPage = () => {
               </tr>
             </thead>
             <tbody>
-              {books.map((book) => {
-                return (
-                  <tr key={book.id}>
-                    <td>{book.id}</td>
-                    <td>{book.titre}</td>
-                    <td>{book.nbrEmprunt}</td>
-                    <td>{book.quantite}</td>
-                  </tr>
-                );
-              })}
+              {isLoading ? (
+                <div className="loading">Loading...</div> // Afficher le message de chargement
+              ) : role === "admin" ? (
+                books.map((book) => {
+                  return (
+                    <tr key={book.id}>
+                      <td>{book.id}</td>
+                      <td>{book.titre}</td>
+                      <td>{book.nbrEmprunt}</td>
+                      <td>{book.quantite}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <p>Unauthenticated user or insufficient access rights</p>
+              )}
             </tbody>
           </table>
         </div>
@@ -143,16 +167,22 @@ const DashboardPage = () => {
               </tr>
             </thead>
             <tbody>
-              {messages.map((message) => {
-                return (
-                  <tr key={message.id}>
-                    <td>{message.id}</td>
-                    <td>{message.admin ? "Admin" : message.expediteur}</td>
-                    <td>{truncateByLetters(message.message)}</td>
-                    <td>{message.admin ? message.recepteur : "Admin"}</td>
-                  </tr>
-                );
-              })}
+              {isLoading ? (
+                <div className="loading">Loading...</div>
+              ) : role === "admin" ? (
+                messages.map((message) => {
+                  return (
+                    <tr key={message.id}>
+                      <td>{message.id}</td>
+                      <td>{message.admin ? "Admin" : message.expediteur}</td>
+                      <td>{truncateByLetters(message.message)}</td>
+                      <td>{message.admin ? message.recepteur : "Admin"}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <p>Unauthenticated user or insufficient access rights</p>
+              )}
             </tbody>
           </table>
         </div>

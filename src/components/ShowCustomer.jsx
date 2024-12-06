@@ -365,7 +365,7 @@ function ShowCustomer({ client, onClose, updateCustomers, isDelete }) {
             {loading ? (
               <button disabled>Loading...</button>
             ) : isDelete ? (
-              <button className="deleteBtn" onClick={() => deleteUser()}>
+              <button className="delete-btn" onClick={() => deleteUser()}>
                 Delete
               </button>
             ) : isEditing ? (

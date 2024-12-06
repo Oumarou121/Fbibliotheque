@@ -107,7 +107,7 @@ export const logoutClient = async () => {
       //console.error("Erreur de déconnexion:", error);
     }
   } catch (error) {
-    //console.error("Erreur de déconnexion:", error);
+    console.error("Erreur de déconnexion:", error);
   }
 };
 
@@ -157,19 +157,19 @@ export const isInCart = async (cartData) => {
 
     if (itemInCart) {
       await RemoveFromCart(itemInCart.id);
-      //console.log(
-      //  `Le livre (ID: ${cartData.livreId}) a été supprimé du panier.`
-      //);
+      console.log(
+       `Le livre (ID: ${cartData.livreId}) a été supprimé du panier.`
+      );
       await getTotalQuantityInCart(cartData.clientId);
       return "removed";
     } else {
       await AddToCart(cartData);
-      //console.log(`Le livre (ID: ${cartData.livreId}) a été ajouté au panier.`);
+      console.log(`Le livre (ID: ${cartData.livreId}) a été ajouté au panier.`);
       await getTotalQuantityInCart(cartData.clientId);
       return "added";
     }
   } catch (error) {
-    //console.error(`Erreur dans isInCart : ${error.message}`);
+    console.error(`Erreur dans isInCart : ${error.message}`);
   }
 };
 

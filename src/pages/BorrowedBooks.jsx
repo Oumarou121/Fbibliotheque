@@ -4,11 +4,15 @@ import { getEmprunt, getClientData, deleteEmprunt } from "../Api";
 import TopBody from "../components/TopBody";
 import Alert from "../components/Alert";
 import "../styles/Cart.css";
+import ShowBorrow from "../components/ShowEmprunt";
 
 const Books = () => {
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentBook, setCurrentBook] = useState(null);
+  const [isDelete, setIsDelete] = useState(false);
 
   // Ajouter une alerte
   const addAlert = (message, link, linkText, type) => {
@@ -23,6 +27,29 @@ const Books = () => {
     setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id));
   };
 
+  const handleCustomerModal = (data = null, isDel = false) => {
+    if (!isDel) {
+      const today = new Date();
+      const dateRetourPrevue = new Date(data.dateRetourPrevue);
+      if (today >= dateRetourPrevue) {
+        addAlert(
+          "you can't read the book anymore please return it",
+          null,
+          null,
+          "warning"
+        );
+      } else {
+        setCurrentBook(data);
+        setIsModalOpen(true);
+        setIsDelete(isDel);
+      }
+    } else {
+      setCurrentBook(data);
+      setIsModalOpen(true);
+      setIsDelete(isDel);
+    }
+  };
+
   const deleteEmpruntHandler = async (id) => {
     try {
       await deleteEmprunt(id);
@@ -32,6 +59,8 @@ const Books = () => {
     } catch (error) {
       //console.error("Error deleting emprunt", error);
       addAlert("Error deleting book.", null, null, "warning");
+    } finally {
+      setIsModalOpen(false);
     }
   };
 
@@ -83,6 +112,16 @@ const Books = () => {
         />
       ))}
 
+      {/* Modale de confirmation d'emprunt */}
+      {isModalOpen && (
+        <ShowBorrow
+          isDelete={isDelete}
+          currentBook={currentBook}
+          onClose={() => setIsModalOpen(false)}
+          handleReturnBook={deleteEmpruntHandler}
+        />
+      )}
+
       <section>
         <div className="shopping">
           <p>Borrowed Books</p>
@@ -91,13 +130,13 @@ const Books = () => {
         {isLoading ? (
           <div className="loading">Loading...</div> // Afficher le message de chargement
         ) : borrowedBooks.length > 0 ? (
-          <section className="cartContent">
+          <section className="books-grid">
             {borrowedBooks.map((book) => (
               <BookCard
                 key={book.id}
                 book={book}
-                handler1={deleteEmpruntHandler}
-                handler2={null}
+                handler1={() => handleCustomerModal(book, true)}
+                handler2={() => handleCustomerModal(book, false)}
                 isCart={false}
                 isFavorites={false}
               />

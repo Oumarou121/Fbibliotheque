@@ -82,7 +82,7 @@ table td {
 }
 
 table th {
-  background-color: var(--blue);;
+  background-color: var(--blue);
   color: white;
 }
 
@@ -160,4 +160,26 @@ table tr:nth-child(even) {
 
 h1 {
   color: black;
+}
+
+tbody p {
+  position: absolute;
+  left: 25%;
+}
+
+@media (max-width: 35em) {
+  tbody p {
+    text-align: center;
+    position: static;
+    left: 0;
+  }
+}
+
+@media (min-width: 59em) {
+  tbody p {
+    margin: auto;
+    position: absolute;
+    left: 35%;
+    text-wrap: nowrap;
+  }
 }
