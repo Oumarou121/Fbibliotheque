@@ -468,17 +468,17 @@ input {
 
 /* ====================================== */
 
-h1{
+.login-modal h1{
     color: white;
     text-align: center;
     padding-bottom: 10px;
 }
 
-i{
+.login-modal i{
     text-decoration: underline;
     cursor: pointer;
 }
 
-i:hover{
+.login-modal i:hover{
     color: var(--focus);
 }
