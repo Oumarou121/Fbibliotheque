@@ -35,6 +35,10 @@ input {
 	transition: background-color var(--trans-dur), color var(--trans-dur);
 }
 
+.title{
+    color: white;
+}
+
 
 /* ====================================================== */
 
@@ -165,22 +169,13 @@ input {
     z-index: 1;
 }
 
-/* .login__segmented-btn[aria-selected=true] {
+
+.login__segmented-btn[aria-roledescription=true] {
     color: var(--fg);
     font: 1em/1.5 "DM Sans", sans-serif;
 }
 
-.login__segmented-btn[aria-selected=false] ~.login__segmented-btn1{
-    color: var(--fg);
-    font: 1em/1.5 "DM Sans", sans-serif;
-} */
-
-.login__segmented-btn[aria-selected=true] {
-    color: var(--fg);
-    font: 1em/1.5 "DM Sans", sans-serif;
-}
-
-.login__segmented-btn1[aria-selected1=true] {
+.login__segmented-btn1[aria-roledescription=true] {
     color: var(--fg);
     font: 1em/1.5 "DM Sans", sans-serif;
 }
@@ -197,19 +192,11 @@ input {
     transition: background-color var(--trans-dur), opacity var(--trans-dur), transform var(--trans-dur) var(--trans-timing);
 }
 
-/* .login__segmented-btn[aria-selected=true]~.login__segmented-focus {
+.login__segmented-btn[aria-roledescription=true]~.login__segmented-focus {
     transform: 0;
 }
 
-.login__segmented-btn[aria-selected=false]~.login__segmented-focus {
-    transform: translateX(calc(100% + 0.5em));
-} */
-
-.login__segmented-btn[aria-selected=true]~.login__segmented-focus {
-    transform: 0;
-}
-
-.login__segmented-btn1[aria-selected1=true]~.login__segmented-focus {
+.login__segmented-btn1[aria-roledescription=true]~.login__segmented-focus {
     transform: translateX(calc(100% + 0.5em));
 }
 
@@ -485,4 +472,13 @@ h1{
     color: white;
     text-align: center;
     padding-bottom: 10px;
+}
+
+i{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+i:hover{
+    color: var(--focus);
 }

@@ -86,7 +86,7 @@ export const BookList = ({ name, books, onBorrowBook }) => {
 
   // Ouvrir la modale d'emprunt
   const handleBorrowClick = (book) => {
-    setCurrentBook(book); 
+    setCurrentBook(book);
     setIsModalOpen(true);
   };
 
@@ -137,8 +137,8 @@ export const BookList = ({ name, books, onBorrowBook }) => {
       const token = localStorage.getItem("authToken");
       if (token) {
         try {
-          const user = await getClientData(); 
-          setUserData(user); 
+          const user = await getClientData();
+          setUserData(user);
         } catch (error) {
           //console.error("Error retrieving user data", error);
         }
@@ -147,7 +147,6 @@ export const BookList = ({ name, books, onBorrowBook }) => {
 
     fetchUserData();
   }, []);
-
 
   return (
     <>
@@ -265,22 +264,66 @@ export const BookList = ({ name, books, onBorrowBook }) => {
 //   );
 // };
 
-export const BookImage = ({ bookId = 1, type = "normal" }) => {
+// export const BookImage = ({ bookId, type = "normal" }) => {
+//   const [imageUrl, setImageUrl] = useState(null);
+
+//   useEffect(() => {
+//     // Mettez à jour l'URL de l'image lorsque bookId change
+//     setImageUrl(
+//       `https://bbibliotheque-production.up.railway.app/api/livres/${bookId}/image`
+//     );
+//   }, [bookId]); // Utilisez bookId comme dépendance
+
+//   return (
+//     <div>
+//       {imageUrl ? (
+//         <img src={imageUrl} className={`book-image-${type}`} alt="Book" />
+//       ) : (
+//         <p>Loading image...</p>
+//       )}
+//     </div>
+//   );
+// };
+
+export const BookImage = ({ bookId, type = "normal" }) => {
   const [imageUrl, setImageUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    // Mettez à jour l'URL de l'image lorsque bookId change
-    setImageUrl(
-      `https://bbibliotheque-production.up.railway.app/api/livres/${bookId}/image`
-    );
-  }, [bookId]); // Utilisez bookId comme dépendance
+    if (!bookId) {
+      setImageUrl(null);
+      setHasError(true);
+      setIsLoading(false);
+      return;
+    }
+
+    // Générer l'URL de l'image
+    const url = `https://bbibliotheque-production.up.railway.app/api/livres/${bookId}/image`;
+
+    setImageUrl(url);
+    setIsLoading(false);
+    setHasError(false);
+  }, [bookId]);
+
+  const handleImageError = () => {
+    setHasError(true);
+    setIsLoading(false);
+  };
 
   return (
-    <div>
-      {imageUrl ? (
-        <img src={imageUrl} className={`book-image-${type}`} alt="Book" />
+    <div className={`book-image-container-${type}`}>
+      {isLoading ? (
+        <p className="loading-text">Loading image...</p>
+      ) : hasError ? (
+        <p className="loading-text">Loading image...</p>
       ) : (
-        <p>Loading image...</p>
+        <img
+          src={imageUrl}
+          className={`book-image-${type}`}
+          alt="Book"
+          onError={handleImageError}
+        />
       )}
     </div>
   );

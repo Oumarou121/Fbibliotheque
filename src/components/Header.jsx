@@ -76,14 +76,14 @@ function Header() {
               alt="Logo"
             />
           </div>
-          <button
+          {/* <button
             className="mobile-close-btn"
             data-visible={isMenuOpen}
             aria-controls="primary-navigation"
             onClick={toggleMenu}
           >
             <i className="uil uil-times-circle"></i>
-          </button>
+          </button> */}
           <nav>
             <ul
               id="primary-navigation"
@@ -93,6 +93,14 @@ function Header() {
               }`}
             >
               <li>
+                <li>
+                  <Link
+                    className="back-btn fs-100 fs-montserrat bold-500"
+                    onClick={() => toggleMenu()}
+                  >
+                    <i className="uil text-black uil-times-circle"></i>
+                  </Link>
+                </li>
                 <Link
                   className={`fs-100 fs-montserrat bold-500 ${
                     activeLink === "/admin" ? "active" : ""
@@ -167,13 +175,28 @@ function Header() {
                   />
                 </div>
                 <div id="logout-btn" onClick={logoutClient}>
-                  <a className="bbb text-red uil fs-150">
+                  <a href="/" className="bbb text-red uil fs-150">
                     <i className="uil fs-150 text-red uil-signout"></i>
                     Déconnexion
                   </a>
                 </div>
               </div>
             </div>
+          </div>
+          <div className="admin">
+            <i className="uil uil-search"></i>
+            <i
+              id="cart-box"
+              className="cart-book uil uil-book"
+              data-quantity="0"
+              onClick={navigation}
+            ></i>
+            <i
+              id="message-box"
+              className="uil uil-envelope-check"
+              data-quantity="0"
+              onClick={navigation1}
+            ></i>
           </div>
         </div>
 
@@ -193,14 +216,6 @@ function Header() {
               alt="Logo"
             />
           </div>
-          <button
-            className="mobile-close-btn"
-            data-visible={isMenuOpen}
-            aria-controls="primary-navigation"
-            onClick={toggleMenu}
-          >
-            <i className="uil uil-times-circle"></i>
-          </button>
           <nav>
             <ul
               id="primary-navigation"
@@ -210,6 +225,15 @@ function Header() {
               }`}
             >
               <li>
+                <li>
+                  <Link
+                    className="back-btn fs-100 fs-montserrat bold-500"
+                    onClick={() => toggleMenu()}
+                  >
+                    <i className="uil text-black uil-times-circle"></i>
+                  </Link>
+                </li>
+
                 <Link
                   className={`fs-100 fs-montserrat bold-500 ${
                     activeLink === "/" ? "active" : ""
@@ -292,7 +316,7 @@ function Header() {
                   </Link>
                 </div>
                 <div id="logout-btn" onClick={logoutClient}>
-                  <a className="bbb text-red uil fs-150" href="#">
+                  <a href="/" className="bbb log text-red uil fs-150">
                     <i className="uil fs-150 text-red uil-signout"></i>
                     Déconnexion
                   </a>
@@ -325,12 +349,18 @@ function Header() {
 }
 
 function Profil({ isAuthenticated, userData }) {
+  const truncateByLetters = (message, charLimit = 10) => {
+    if (message.length > charLimit) {
+      return message.slice(0, charLimit) + " ...";
+    }
+    return message;
+  };
   return (
     <>
       {isAuthenticated && userData ? (
         <Link className="bbb text-black uil fs-150" to="/profil">
           <i className="uil fs-150 uil-user"></i>
-          {userData?.nom || "Profil"}
+          {truncateByLetters(userData?.nom) || "Profil"}
         </Link>
       ) : (
         <Link className="bbb text-black uil fs-150" to="/login">

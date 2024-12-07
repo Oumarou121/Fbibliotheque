@@ -103,7 +103,7 @@ export const logoutClient = async () => {
       //console.log("Déconnexion réussie.");
       window.location.reload();
     } else {
-      const error = await response.text();
+      await response.text();
       //console.error("Erreur de déconnexion:", error);
     }
   } catch (error) {

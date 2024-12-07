@@ -100,7 +100,6 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
   };
 
   const saveChanges = async () => {
-    //console.log(book);
     if (!currentBook) {
       if (
         !book?.titre ||
@@ -202,7 +201,13 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
           />
         ))}
         {!isEditing ? (
-          <BookImage bookId={book?.id} />
+          // <BookImage bookId={book?.id} />
+          <div className="bookHeader">
+            <BookImage bookId={book?.id} />
+            <button className="closeButton" onClick={() => onClose()}>
+              &times;
+            </button>
+          </div>
         ) : (
           <div className="image-section">
             {!isPreviewVisible && (

@@ -33,12 +33,7 @@ const UserProfile = () => {
         const typeMapping = ["Basic", "Standard", "Premium"];
         setTypeAdherent(typeMapping[lastAdherent?.type] || "No subscription");
       } catch (error) {
-        addAlert(
-          "Error loading user data.",
-          "",
-          "",
-          "error"
-        );
+        addAlert("Error loading user data.", "", "", "error");
       }
     };
     fetchUserData();
@@ -97,7 +92,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="profileContainer">
+    <div className="profileContainer1">
       {alerts.map((alert) => (
         <Alert
           key={alert.id}

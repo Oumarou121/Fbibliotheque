@@ -1,0 +1,155 @@
+/* Conteneur principal */
+.bookModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Contenu de la modale */
+.modalContent {
+  width: 90%;
+  max-width: 600px;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  animation: scaleUp 0.3s ease forwards;
+}
+
+/* En-tête avec image */
+.bookHeader {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bookCover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  font-size: 20px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.closeButton:hover {
+  background: #d63333;
+}
+
+/* Corps */
+.bookBody {
+  padding: 20px;
+  text-align: center;
+}
+
+.bookTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.bookAuthor {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.bookYear {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 24px;
+}
+
+.bookDescription {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.borrowDate {
+  font-size: 14px;
+  color: #e63946;
+  margin-bottom: 20px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.actionButton {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 14px;
+  color: white;
+  background: #007bff;
+  border-radius: 24px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.actionButton:hover {
+  background: #0056b3;
+}
+
+.readButton {
+  background: #28a745;
+}
+
+.readButton:hover {
+  background: #218838;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.returnAction {
+  background-color: #ff9800;
+}

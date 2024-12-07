@@ -1,12 +1,13 @@
 .profileContainer {
   width: 500px;
-  /* max-width: 500px; */
+  height: 100%;
   margin: 50px auto;
   padding: 20px;
   border-radius: 10px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
+  overflow-y: scroll;
 }
 
 .profileContainer h2 {
@@ -137,5 +138,105 @@
 }
 
 .profileContainer .delete-btn {
+  background-color: #f44336;
+}
+
+/* =========================================================================================== */
+
+.profileContainer1 {
+  max-width: 500px;
+  height: 100%;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  overflow-y: scroll;
+}
+
+.profileContainer1 h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.profileContainer1 .profileCard {
+  padding: 20px;
+}
+
+.profileContainer1 .profileInfo {
+  margin-bottom: 15px;
+}
+
+.profileContainer1 label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.profileContainer1 p,
+.profileContainer1 input {
+  margin: 0;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.profileContainer1 input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.profileContainer1 .profileActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profileContainer1 button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Centrer le texte et l'icône verticalement */
+  justify-content: center; /* Centrer le texte horizontalement */
+  text-align: center;
+  gap: 5px; /* Espacement entre l'icône et le texte */
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 0.6; /* Pour prendre l'espace disponible */
+}
+
+.profileContainer1 button a {
+  color: white; /* S'assurer que le lien à l'intérieur du bouton a la même couleur que le texte */
+  text-decoration: none; /* Enlever le souligné du lien */
+}
+
+/* Effet au survol */
+.profileContainer1 button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profileContainer1 button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profileContainer1 .read-btn {
+  background-color: #45a049;
+}
+
+.profileContainer1 .return-btn {
+  background-color: #ff9800;
+}
+
+.profileContainer1 .delete-btn {
   background-color: #f44336;
 }

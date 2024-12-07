@@ -94,7 +94,7 @@ const LoginModal = () => {
               id="login-btn1"
               className={`login__segmented-btn`}
               onClick={loginHandler}
-              aria-selected={isLogin}
+              aria-roledescription={isLogin}
             >
               Sign In
             </button>
@@ -102,7 +102,7 @@ const LoginModal = () => {
               id="login-btn2"
               className={`login__segmented-btn login__segmented-btn1`}
               onClick={registerHandler}
-              aria-selected1={isRegister || isPassword}
+              aria-roledescription={isRegister || isPassword}
             >
               Sign Up
             </button>
@@ -341,14 +341,14 @@ function FLogin({
 
       {/* Password */}
       <div className="login_div">
-        <a
+        <i
           className="login__forgot text-white"
-          href="#"
+          href=""
           id="forgot-password-btn"
           onClick={forgotPasswordHandler}
         >
           Forgot password?
-        </a>
+        </i>
         <input
           className="login-input"
           id="user-password"

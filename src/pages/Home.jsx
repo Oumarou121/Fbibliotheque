@@ -10,7 +10,7 @@ function Home() {
   const navigate = useNavigate();
 
   const navigation = () => {
-    navigate("/library#showMore");
+    navigate("/library");
   };
 
   useEffect(() => {
