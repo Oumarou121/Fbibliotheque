@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-// import "../styles/Modal.css";
-// import "../styles/Profil.css";
 import "../styles/howEmprunt.css";
 import Alert from "../components/Alert";
 import { BookImage } from "./BookList";
@@ -87,72 +85,6 @@ function ShowBorrow({ currentBook, onClose, handleReturnBook, isDelete }) {
     };
   }, [onClose]);
 
-  // return (
-  //   <div className="modal2">
-  //     <div className="profileContainer" ref={modalRef}>
-  //       {alerts.map((alert) => (
-  //         <Alert
-  //           key={alert.id}
-  //           message={alert.message}
-  //           link={alert.link}
-  //           linkText={alert.linkText}
-  //           type={alert.type}
-  //           onClose={() => removeAlert(alert.id)}
-  //         />
-  //       ))}
-  //       <BookImage bookId={book?.id} />
-  //       <div className="profileCard">
-  //         <div className="profileInfo">
-  //           <label>Author :</label>
-
-  //           <p>{book?.auteur}</p>
-  //         </div>
-
-  //         <div className="profileInfo">
-  //           <label>Title :</label>
-
-  //           <p>{book?.titre}</p>
-  //         </div>
-
-  //         <div className="profileInfo">
-  //           <label>Year of publication :</label>
-
-  //           <p>{book?.anneePublication}</p>
-  //         </div>
-
-  //         <div className="profileInfo">
-  //           <label>Description :</label>
-
-  //           <p>{description}</p>
-  //         </div>
-
-  //         <div className="profileInfo">
-  //         <label>Book borrowed until :</label>
-  //           <p className={"text-red"}>{currentBook.dateRetourPrevue}</p>
-  //         </div>
-
-  //         <div className="profileActions">
-  //           {loading ? (
-  //             <button disabled>Loading...</button>
-  //           ) : isDelete ? (
-  //             <button
-  //               className="return-btn"
-  //               onClick={() => handleReturnBook(currentBook?.id)}
-  //             >
-  //               Return
-  //             </button>
-  //           ) : (
-  //             <button className="read-btn" onClick={() => null}>
-  //               <a target="_blank" href={linkRead} rel="noopener noreferrer">
-  //                 To sart read
-  //               </a>
-  //             </button>
-  //           )}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 
   return (
     <div className="bookModal">
@@ -211,31 +143,7 @@ function ShowBorrow({ currentBook, onClose, handleReturnBook, isDelete }) {
                 Start Reading
               </a>
             )}
-            {/* <a
-              href={linkRead}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="actionButton readButton"
-            >
-              Start Reading
-            </a> */}
           </div>
-          {/* {loading ? (
-            <button disabled>Loading...</button>
-          ) : isDelete ? (
-            <button
-              className="return-btn"
-              onClick={() => handleReturnBook(currentBook?.id)}
-            >
-              Return
-            </button>
-          ) : (
-            <button className="read-btn" onClick={() => null}>
-              <a target="_blank" href={linkRead} rel="noopener noreferrer">
-                To sart read
-              </a>
-            </button>
-          )} */}
         </div>
       </div>
     </div>

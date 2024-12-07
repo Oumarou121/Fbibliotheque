@@ -25,6 +25,11 @@ function Header() {
 
   // Fonction pour basculer le menu mobile
   const toggleMenu = () => {
+    if (isMenuOpen) {
+      
+    } else {
+      
+    }
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -76,15 +81,14 @@ function Header() {
               alt="Logo"
             />
           </div>
-          {/* <button
-            className="mobile-close-btn"
-            data-visible={isMenuOpen}
-            aria-controls="primary-navigation"
-            onClick={toggleMenu}
-          >
-            <i className="uil uil-times-circle"></i>
-          </button> */}
           <nav>
+            {/* <ul
+              id="primary-navigation"
+              data-visible={isMenuOpen}
+              className={`primary-navigation flex ${
+                isMenuOpen ? "visible" : ""
+              }`}
+            > */}
             <ul
               id="primary-navigation"
               data-visible={isMenuOpen}
@@ -217,6 +221,13 @@ function Header() {
             />
           </div>
           <nav>
+            {/* <ul
+              id="primary-navigation"
+              data-visible={isMenuOpen}
+              className={`primary-navigation flex ${
+                isMenuOpen ? "visible" : ""
+              }`}
+            > */}
             <ul
               id="primary-navigation"
               data-visible={isMenuOpen}
