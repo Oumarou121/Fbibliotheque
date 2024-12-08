@@ -209,7 +209,10 @@ function ShowBook({ currentBook, onClose, updateBooks, isDelete }) {
             </button>
           </div>
         ) : (
-          <div className="image-section">
+          <div className="image-section bookHeader">
+            <button className="closeButton" onClick={() => onClose()}>
+              &times;
+            </button>
             {!isPreviewVisible && (
               <div
                 id="chooseMainImage"

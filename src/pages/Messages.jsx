@@ -74,6 +74,18 @@ const MessagesPage = () => {
     setFilteredMessages(results);
   }, [searchTerm, messages]);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isModalOpen]);
+
   return (
     <>
       {/* Modale de confirmation d'emprunt */}
@@ -122,7 +134,12 @@ const MessagesPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button disabled={role !== "admin"} onClick={() => handleMessageModal()}>Add New Message</button>
+          <button
+            disabled={role !== "admin"}
+            onClick={() => handleMessageModal()}
+          >
+            Add New Message
+          </button>
         </div>
 
         <table id="productTable">

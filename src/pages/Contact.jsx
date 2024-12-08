@@ -5,7 +5,6 @@ import SupportEmailImg1 from "../assets/images/sup-1.svg";
 import SupportEmailImg2 from "../assets/images/sup-2.svg";
 import SupportEmailImg3 from "../assets/images/sup-3.svg";
 import { sendClientMessage } from "../Api";
-import MapComponent from "../components/GoogleMap.jsx";
 
 function Contact() {
   return (
@@ -107,7 +106,6 @@ function ContactBody() {
         <div>
           <div className="map">
             <h4 className="fs-poppins fs-200 text-black">Our Location</h4>
-            <MapComponent />
           </div>
         </div>
       </section>

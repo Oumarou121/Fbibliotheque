@@ -17,6 +17,7 @@ export const registerClient = async (clientData) => {
       throw new Error(error);
     }
     const token = await response.text();
+    window.location.reload();
     localStorage.setItem("authToken", token);
     return token;
   } catch (error) {
@@ -75,6 +76,7 @@ export const loginClient = async (loginData) => {
       const error = await response.text();
       throw new Error(error);
     }
+    window.location.reload();
     return await response.text();
   } catch (error) {
     throw error;
@@ -99,15 +101,17 @@ export const logoutClient = async () => {
     });
 
     if (response.ok) {
-      localStorage.removeItem("authToken");
-      //console.log("Déconnexion réussie.");
-      window.location.reload();
+      // localStorage.removeItem("authToken");
+      // window.location.reload();
     } else {
       await response.text();
       //console.error("Erreur de déconnexion:", error);
     }
   } catch (error) {
     console.error("Erreur de déconnexion:", error);
+  } finally {
+    localStorage.removeItem("authToken");
+    window.location.reload();
   }
 };
 
@@ -158,7 +162,7 @@ export const isInCart = async (cartData) => {
     if (itemInCart) {
       await RemoveFromCart(itemInCart.id);
       console.log(
-       `Le livre (ID: ${cartData.livreId}) a été supprimé du panier.`
+        `Le livre (ID: ${cartData.livreId}) a été supprimé du panier.`
       );
       await getTotalQuantityInCart(cartData.clientId);
       return "removed";

@@ -90,6 +90,18 @@ const LoansPage = () => {
     getLoans();
   }, []);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isModalOpen]);
+
   const sendWaring = async (loan) => {
     setLoading(true);
     try {

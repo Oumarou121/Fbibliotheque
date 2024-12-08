@@ -48,8 +48,8 @@ function ShowBorrow({ currentBook, onClose, handleReturnBook, isDelete }) {
         if (!token) {
           addAlert(
             "Please log in to read your book.",
-            "/login",
-            "Login",
+            null,
+            null,
             "warning"
           );
           setLoading(false);

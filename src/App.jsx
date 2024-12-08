@@ -32,25 +32,22 @@ function AppContent() {
   const location = useLocation(); // Hook pour obtenir la localisation actuelle
 
   // Déterminer si le header et/ou footer doivent être masqués
-  const hideHeaderFooter = ["/login", "/messages", "/profil"].includes(
-    location.pathname
-  ); // Pages spécifiques
+  const hideHeaderFooter = ["/messages", "/profil"].includes(location.pathname); // Pages spécifiques
   const isAdminPage = location.pathname.includes("admin"); // Pages Admin
-  const hideHeader = location.pathname === "/login"; // Page Login uniquement
 
   //console.log("Hide Header/Footer:", hideHeaderFooter);
 
   return (
     <div>
       {/* Affiche le header sauf si hideHeader est vrai */}
-      {!hideHeader && <Header />}
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/library" element={<Library />} />
         <Route path="/abonnement" element={<Abonnement />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<LoginModal />} />
+        {/* <Route path="/login" element={<LoginModal />} /> */}
         <Route path="/emprunts" element={<BorrowedBooks />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/cart" element={<Cart />} />

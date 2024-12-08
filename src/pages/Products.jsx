@@ -53,6 +53,18 @@ const ProductsPage = () => {
     setFilteredBooks(results);
   }, [searchTerm, books]);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isModalOpen]);
+
   return (
     <>
       {/* Modale de confirmation d'emprunt */}
@@ -95,7 +107,9 @@ const ProductsPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button disabled={role !== "admin"} onClick={() => handleBookModal()}>Add New Book</button>
+          <button disabled={role !== "admin"} onClick={() => handleBookModal()}>
+            Add New Book
+          </button>
         </div>
 
         <table id="productTable">

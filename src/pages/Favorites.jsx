@@ -90,8 +90,8 @@ const Favorite = () => {
         if (!token) {
           addAlert(
             "Please log in to view your Favorites.",
-            "/login",
-            "Login",
+            null,
+            null,
             "warning"
           );
           setIsLoading(false);

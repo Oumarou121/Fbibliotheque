@@ -8,6 +8,7 @@ import {
   getTotalMessageInCart,
 } from "../Api";
 import { useNavigate } from "react-router-dom";
+import ShowLogin from "../components/ShowLogin";
 
 function Header() {
   const [activeLink, setActiveLink] = useState("/");
@@ -16,6 +17,7 @@ function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fonction pour changer le lien actif
   const handleLinkClick = (link) => {
@@ -23,12 +25,14 @@ function Header() {
     setIsMenuOpen(false);
   };
 
+  const handleLoginModal = () => {
+    setIsModalOpen(true);
+  };
+
   // Fonction pour basculer le menu mobile
   const toggleMenu = () => {
     if (isMenuOpen) {
-      
     } else {
-      
     }
     setIsMenuOpen(!isMenuOpen);
   };
@@ -65,10 +69,26 @@ function Header() {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isModalOpen]);
+
   // Mettre à jour activeLink à chaque changement de l'URL
   useEffect(() => {
     setActiveLink(location.pathname);
   }, [location]);
+
+  const handleLogOut = async () => {
+    await logoutClient();
+  };
   //userData?.role === "admin"
   if (userData?.role === "admin") {
     return (
@@ -82,13 +102,6 @@ function Header() {
             />
           </div>
           <nav>
-            {/* <ul
-              id="primary-navigation"
-              data-visible={isMenuOpen}
-              className={`primary-navigation flex ${
-                isMenuOpen ? "visible" : ""
-              }`}
-            > */}
             <ul
               id="primary-navigation"
               data-visible={isMenuOpen}
@@ -176,10 +189,11 @@ function Header() {
                   <Profil
                     isAuthenticated={isAuthenticated}
                     userData={userData}
+                    handleLoginModal={handleLoginModal}
                   />
                 </div>
-                <div id="logout-btn" onClick={logoutClient}>
-                  <a href="/" className="bbb text-red uil fs-150">
+                <div id="logout-btn" onClick={handleLogOut}>
+                  <a role="button" className="bbb text-red uil fs-150">
                     <i className="uil fs-150 text-red uil-signout"></i>
                     Déconnexion
                   </a>
@@ -211,161 +225,159 @@ function Header() {
     );
   } else {
     return (
-      <header className="primary-header container flex">
-        <div className="header-inner-one flex">
-          <div className="logo">
-            <img
-              src="/logo.png"
-              style={{ width: "50px", height: "50px" }}
-              alt="Logo"
-            />
-          </div>
-          <nav>
-            {/* <ul
-              id="primary-navigation"
-              data-visible={isMenuOpen}
-              className={`primary-navigation flex ${
-                isMenuOpen ? "visible" : ""
-              }`}
-            > */}
-            <ul
-              id="primary-navigation"
-              data-visible={isMenuOpen}
-              className={`primary-navigation flex ${
-                isMenuOpen ? "visible" : ""
-              }`}
-            >
-              <li>
+      <>
+        {isModalOpen && <ShowLogin onClose={() => setIsModalOpen(false)} />}
+        <header className="primary-header container flex">
+          <div className="header-inner-one flex">
+            <div className="logo">
+              <img
+                src="/logo.png"
+                style={{ width: "50px", height: "50px" }}
+                alt="Logo"
+              />
+            </div>
+            <nav>
+              <ul
+                id="primary-navigation"
+                data-visible={isMenuOpen}
+                className={`primary-navigation flex ${
+                  isMenuOpen ? "visible" : ""
+                }`}
+              >
                 <li>
+                  <li>
+                    <Link
+                      className="back-btn fs-100 fs-montserrat bold-500"
+                      onClick={() => toggleMenu()}
+                    >
+                      <i className="uil text-black uil-times-circle"></i>
+                    </Link>
+                  </li>
+
                   <Link
-                    className="back-btn fs-100 fs-montserrat bold-500"
-                    onClick={() => toggleMenu()}
+                    className={`fs-100 fs-montserrat bold-500 ${
+                      activeLink === "/" ? "active" : ""
+                    }`}
+                    to="/"
+                    onClick={() => handleLinkClick("/")}
                   >
-                    <i className="uil text-black uil-times-circle"></i>
+                    Home
                   </Link>
                 </li>
-
-                <Link
-                  className={`fs-100 fs-montserrat bold-500 ${
-                    activeLink === "/" ? "active" : ""
-                  }`}
-                  to="/"
-                  onClick={() => handleLinkClick("/")}
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`fs-100 fs-montserrat bold-500 ${
-                    activeLink === "/library" ? "active" : ""
-                  }`}
-                  to="/library"
-                  onClick={() => handleLinkClick("/library")}
-                >
-                  Library
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`fs-100 fs-montserrat bold-500 ${
-                    activeLink === "/abonnement" ? "active" : ""
-                  }`}
-                  to="/abonnement"
-                  onClick={() => handleLinkClick("/abonnement")}
-                >
-                  Subscription
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`fs-100 fs-montserrat bold-500 ${
-                    activeLink === "/about" ? "active" : ""
-                  }`}
-                  to="/about"
-                  onClick={() => handleLinkClick("/about")}
-                >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`fs-100 fs-montserrat bold-500 ${
-                    activeLink === "/contact" ? "active" : ""
-                  }`}
-                  to="/contact"
-                  onClick={() => handleLinkClick("/contact")}
-                >
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
-        <div className="header-login flex">
-          <div className="menu-bar">
-            <div className="dropdown1">
-              <div className="dropbtn fs-100 fs-montserrat bold-500 text-black">
-                <i className="uil uil-user"></i> Profil
-              </div>
-              <div className="dropdown-content">
-                <div id="login-show">
-                  <Profil
-                    isAuthenticated={isAuthenticated}
-                    userData={userData}
-                  />
-                </div>
-                <div>
-                  <Link className="bbb text-black uil fs-150" to="/emprunts">
-                    <i className="uil fs-150 uil-book"></i>Vos Emprunts
+                <li>
+                  <Link
+                    className={`fs-100 fs-montserrat bold-500 ${
+                      activeLink === "/library" ? "active" : ""
+                    }`}
+                    to="/library"
+                    onClick={() => handleLinkClick("/library")}
+                  >
+                    Library
                   </Link>
-                </div>
-                <div>
-                  <Link className="bbb text-black uil fs-150" to="/favorites">
-                    <i className="uil fs-150 uil-heart-alt"></i>Favoris
+                </li>
+                <li>
+                  <Link
+                    className={`fs-100 fs-montserrat bold-500 ${
+                      activeLink === "/abonnement" ? "active" : ""
+                    }`}
+                    to="/abonnement"
+                    onClick={() => handleLinkClick("/abonnement")}
+                  >
+                    Subscription
                   </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`fs-100 fs-montserrat bold-500 ${
+                      activeLink === "/about" ? "active" : ""
+                    }`}
+                    to="/about"
+                    onClick={() => handleLinkClick("/about")}
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`fs-100 fs-montserrat bold-500 ${
+                      activeLink === "/contact" ? "active" : ""
+                    }`}
+                    to="/contact"
+                    onClick={() => handleLinkClick("/contact")}
+                  >
+                    Contact Us
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <div className="header-login flex">
+            <div className="menu-bar">
+              <div className="dropdown1">
+                <div className="dropbtn fs-100 fs-montserrat bold-500 text-black">
+                  <i className="uil uil-user"></i> Profil
                 </div>
-                <div id="logout-btn" onClick={logoutClient}>
-                  <a href="/" className="bbb log text-red uil fs-150">
-                    <i className="uil fs-150 text-red uil-signout"></i>
-                    Déconnexion
-                  </a>
+                <div className="dropdown-content">
+                  <div id="login-show">
+                    <Profil
+                      isAuthenticated={isAuthenticated}
+                      userData={userData}
+                      handleLoginModal={handleLoginModal}
+                    />
+                  </div>
+                  <div>
+                    <Link className="bbb text-black uil fs-150" to="/emprunts">
+                      <i className="uil fs-150 uil-book"></i>Vos Emprunts
+                    </Link>
+                  </div>
+                  <div>
+                    <Link className="bbb text-black uil fs-150" to="/favorites">
+                      <i className="uil fs-150 uil-heart-alt"></i>Favoris
+                    </Link>
+                  </div>
+                  <div id="logout-btn" onClick={handleLogOut}>
+                    <a role="button" className="bbb log text-red uil fs-150">
+                      <i className="uil fs-150 text-red uil-signout"></i>
+                      Déconnexion
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <i className="uil uil-search"></i>
+            <i
+              id="cart-box"
+              className="cart-book uil uil-book"
+              data-quantity="0"
+              onClick={navigation}
+            ></i>
+            <i
+              id="message-box"
+              className="uil uil-envelope-check"
+              data-quantity="0"
+              onClick={navigation1}
+            ></i>
           </div>
 
-          <i className="uil uil-search"></i>
-          <i
-            id="cart-box"
-            className="cart-book uil uil-book"
-            data-quantity="0"
-            onClick={navigation}
-          ></i>
-          <i
-            id="message-box"
-            className="uil uil-envelope-check"
-            data-quantity="0"
-            onClick={navigation1}
-          ></i>
-        </div>
-
-        <div className="mobile-open-btn" onClick={toggleMenu}>
-          <i className="uil uil-align-right"></i>
-        </div>
-      </header>
+          <div className="mobile-open-btn" onClick={toggleMenu}>
+            <i className="uil uil-align-right"></i>
+          </div>
+        </header>
+      </>
     );
   }
 }
 
-function Profil({ isAuthenticated, userData }) {
+function Profil({ isAuthenticated, userData, handleLoginModal }) {
   const truncateByLetters = (message, charLimit = 10) => {
     if (message.length > charLimit) {
       return message.slice(0, charLimit) + " ...";
     }
     return message;
   };
+
   return (
     <>
       {isAuthenticated && userData ? (
@@ -374,7 +386,10 @@ function Profil({ isAuthenticated, userData }) {
           {truncateByLetters(userData?.nom) || "Profil"}
         </Link>
       ) : (
-        <Link className="bbb text-black uil fs-150" to="/login">
+        <Link
+          onClick={() => handleLoginModal()}
+          className="bbb text-black uil fs-150"
+        >
           <i className="uil fs-150 uil-user"></i>Se connecter
         </Link>
       )}

@@ -72,8 +72,8 @@ const Books = () => {
         if (!token) {
           addAlert(
             "Please log in to view your Borrowed Books.",
-            "/login",
-            "Login",
+            null,
+            null,
             "warning"
           );
           setIsLoading(false);

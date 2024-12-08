@@ -55,6 +55,18 @@ const CustomersPage = () => {
     );
     setFilteredCustomers(results);
   }, [searchTerm, customers]);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isModalOpen]);
   return (
     <>
       {/* Modale de confirmation d'emprunt */}
@@ -104,7 +116,10 @@ const CustomersPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button disabled={role !== "admin"} onClick={() => handleCustomerModal()}>
+          <button
+            disabled={role !== "admin"}
+            onClick={() => handleCustomerModal()}
+          >
             Add New Customer
           </button>
         </div>

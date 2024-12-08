@@ -37,7 +37,7 @@
 
 /* ==================Media Quries=== */
 
-@media (min-width: 60em) {
+@media (min-width: 59em) {
   .about-section {
     grid-auto-columns: 1fr;
     align-items: center;
